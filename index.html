@@ -1,0 +1,3491 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMART POSTURE THAI Web App</title>
+  <style>
+    :root {
+      --bg: #f7faf8;
+      --ink: #17231f;
+      --muted: #66746e;
+      --panel: #ffffff;
+      --line: #dce7e1;
+      --teal: #0b5f4a;
+      --teal-2: #e4f3ee;
+      --blue: #234f73;
+      --red: #c84e3b;
+      --amber: #a97821;
+      --gold: #b9934b;
+      --gold-soft: #f7f0df;
+      --green: #176842;
+      --shadow: 0 16px 40px rgba(17, 35, 31, .08);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 272px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      color: #eef8f8;
+      background: #0f2e25;
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 4px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #0b5f4a, #b9934b);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .brand span {
+      display: block;
+      color: #b8d0d4;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d8e7e9;
+      background: transparent;
+      text-align: left;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: #fff;
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+    }
+
+    .qr-card {
+      margin-top: auto;
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .qr-card img {
+      width: 126px;
+      height: 126px;
+      display: block;
+      border-radius: 8px;
+      background: #fff;
+      margin: 0 auto 10px;
+    }
+
+    .qr-card strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .qr-card small {
+      display: block;
+      color: #b8d0d4;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      min-height: 520px;
+      display: grid;
+      align-items: end;
+      padding: 34px;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(12, 43, 35, .94), rgba(12, 43, 35, .62), rgba(12, 43, 35, .20)),
+        url("https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=80") center/cover;
+    }
+
+    .hero-inner {
+      width: min(860px, 100%);
+      padding-bottom: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: #d9fffb;
+      background: rgba(11, 95, 74, .78);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 72px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 18px 0 24px;
+      color: rgba(255, 255, 255, .88);
+      line-height: 1.65;
+      font-size: 18px;
+    }
+
+    .hero-actions,
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .btn {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--ink);
+      background: var(--panel);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      border-color: var(--teal);
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .btn.ghost {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .38);
+      background: rgba(255, 255, 255, .13);
+    }
+
+    .section {
+      padding: 24px 28px;
+    }
+
+    .band {
+      background: #eef6f2;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 5px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-head p,
+    .muted {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .flow {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .flow-step,
+    .panel,
+    .metric,
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .flow-step {
+      padding: 15px;
+      min-height: 132px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      width: 16px;
+      height: 2px;
+      background: var(--teal);
+    }
+
+    .flow-step b {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+      font-size: 13px;
+    }
+
+    .flow-step strong {
+      line-height: 1.35;
+    }
+
+    .flow-step span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .form-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: #354351;
+      font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 11px;
+      color: var(--ink);
+      background: #fbfcfd;
+    }
+
+    textarea {
+      min-height: 90px;
+      padding-top: 10px;
+      resize: vertical;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .assessment-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      margin: -18px -18px 14px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(10px);
+    }
+
+    .progress-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress-track {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e8eee9;
+    }
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+      transition: width .18s ease;
+    }
+
+    .tab-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 38px;
+      padding: 0 11px;
+      color: var(--muted);
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      color: #fff;
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .inline-note {
+      display: block;
+      margin-top: 6px;
+      color: var(--teal);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .choice-grid {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfc;
+    }
+
+    .choice-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+    }
+
+    .choice-grid input {
+      width: auto;
+      min-height: auto;
+    }
+
+    .choice-grid textarea {
+      width: 100%;
+      min-height: 82px;
+      margin-top: 2px;
+    }
+
+    .date-field {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 54px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .date-native {
+      min-width: 54px;
+      padding: 11px 8px;
+      color: transparent;
+      cursor: pointer;
+    }
+
+    .date-native::-webkit-calendar-picker-indicator {
+      opacity: 1;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+    }
+
+    .other-field {
+      display: none;
+    }
+
+    .other-field.show {
+      display: block;
+    }
+
+
+    .recommendation-list {
+      display: grid;
+      gap: 7px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .analysis-source {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .recommendation-list li {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfc;
+      line-height: 1.45;
+    }
+
+    .analysis-list li {
+      border-left: 4px solid var(--gold);
+      background: #fffdf7;
+    }
+
+
+    .final-actions {
+      border-color: rgba(189, 154, 90, .55);
+      background: linear-gradient(180deg, #ffffff 0%, #fffaf0 100%);
+    }
+
+    .question-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .score-summary,
+    .assessment-section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .score-summary {
+      padding: 13px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+    }
+
+    .score-summary strong {
+      color: var(--ink);
+    }
+
+    .detail-summary {
+      background: var(--teal-2);
+      color: #25535a;
+    }
+
+    .assessment-section {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .assessment-section h3 {
+      margin: 0 0 2px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .spt08-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 14px;
+      font-size: 14px;
+    }
+
+    .spt08-table th,
+    .spt08-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .spt08-table th {
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .overall-list {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .overall-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfc;
+    }
+
+    .overall-item.active {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      font-weight: 800;
+    }
+
+    .spt08-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .assessment-fields {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .assessment-field.wide {
+      grid-column: span 3;
+    }
+
+    .question {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 210px;
+      align-items: center;
+      gap: 14px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .question strong {
+      display: block;
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    .question small {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .scale-legend {
+      display: block;
+      margin-top: 7px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #355159;
+      background: #edf7f6;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--teal);
+    }
+
+    .range-wrap {
+      display: grid;
+      grid-template-columns: 1fr 44px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-value {
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--teal);
+      background: var(--teal-2);
+      font-weight: 800;
+    }
+
+    .result-grid {
+      grid-template-columns: 1.05fr .95fr;
+      align-items: start;
+    }
+
+    .score-ring {
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      margin: 8px auto 16px;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--teal) calc(var(--score) * 1%), #e7ecef 0);
+    }
+
+    .score-ring div {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      text-align: center;
+    }
+
+    .score-ring strong {
+      display: block;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .score-ring span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .result-card {
+      padding: 18px;
+    }
+
+    .result-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .level {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--red);
+      font-weight: 700;
+    }
+
+    .level.medium { background: var(--amber); }
+    .level.low { background: var(--green); }
+
+    .advice {
+      margin-top: 14px;
+      padding: 13px;
+      border-radius: 8px;
+      color: #24444a;
+      background: #e8f5f4;
+      line-height: 1.6;
+    }
+
+    .metrics {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .metric {
+      padding: 15px;
+      min-height: 118px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 9px;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 46px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e7ecef;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: var(--teal);
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .sheet-table th,
+    .sheet-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .sheet-table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border-radius: 999px;
+      color: var(--teal);
+      background: var(--teal-2);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .badge.warn {
+      color: var(--amber);
+      background: #fff2d8;
+    }
+
+    .badge.red {
+      color: var(--red);
+      background: #fae6e1;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: min(380px, calc(100vw - 44px));
+      padding: 14px 16px;
+      border-radius: 8px;
+      color: #fff;
+      background: #14262b;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .18s ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1120px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+      .nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .qr-card {
+        display: grid;
+        grid-template-columns: 86px 1fr;
+        align-items: center;
+        gap: 12px;
+      }
+      .qr-card img {
+        width: 86px;
+        height: 86px;
+        margin: 0;
+      }
+      .flow,
+      .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .flow-step:not(:last-child)::after { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .hero { min-height: 560px; padding: 22px; }
+      .section { padding: 20px 16px; }
+      .section-head,
+      .result-grid {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+      .form-grid,
+      .flow,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+      .question {
+        grid-template-columns: 1fr;
+      }
+      .score-summary {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .assessment-fields {
+        grid-template-columns: 1fr;
+      }
+      .assessment-field.wide {
+        grid-column: auto;
+      }
+      .nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .bar-row {
+        grid-template-columns: 92px 1fr 40px;
+      }
+      .hero-actions .btn,
+      .actions .btn {
+        width: 100%;
+      }
+    }
+  
+
+    /* Production participant view: hide owner/admin controls from respondents. */
+    body.production-participant .nav button[data-go="#dashboard"],
+    body.production-participant .nav button[data-go="#sheets"],
+    body.production-participant a[href="#dashboard"],
+    body.production-participant #dashboard,
+    body.production-participant #sheets,
+    body.production-participant #demoBtn,
+    body.production-participant #saveLocalBtn,
+    body.production-participant #sendSheetBtn,
+    body.production-participant #exportCsvBtn,
+    body.production-participant #clearBtn,
+    body.production-participant #downloadAppsScriptBtn {
+      display: none !important;
+    }
+
+    body.production-participant label:has(#sheetEndpoint) {
+      display: none !important;
+    }
+
+  </style>
+</head>
+<body class="production-participant">
+  <div class="app">
+    <aside class="sidebar" aria-label="เมนู SMART POSTURE THAI">
+      <div class="brand">
+        <div class="logo-mark">SPT</div>
+        <div>
+          <strong>SMART POSTURE THAI</strong>
+          <span>Web App ประเมินและติดตามผล</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="active" type="button" data-go="#home">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 3l9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9Z"/></svg>
+          หน้าแรก
+        </button>
+        <button type="button" data-go="#register">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6M16 11h6"/></svg>
+          ลงทะเบียน
+        </button>
+        <button type="button" data-go="#assessment">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          แบบประเมิน
+        </button>
+        <button type="button" data-go="#result">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5m0 14h16M8 17v-7m4 7V7m4 10v-4"/></svg>
+          สรุปผล
+        </button>
+        <button type="button" data-go="#dashboard">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-12h8V3h-8v6Z"/></svg>
+          Dashboard
+        </button>
+        <button type="button" data-go="#sheets">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>
+          Google Sheet
+        </button>
+      </nav>
+
+      <div class="qr-card">
+        <img id="qrImage" alt="QR Code สำหรับเข้าใช้งาน SMART POSTURE THAI">
+        <div>
+          <strong>ลิงก์เฉพาะสำหรับบุคลากร</strong>
+          <small id="appLink"></small>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-inner">
+          <span class="eyebrow">SPT-01 ถึง SPT-08 | ประเมิน posture และติดตามผล</span>
+          <h1>SMART POSTURE THAI</h1>
+          <p>
+            ระบบนวัตกรรมส่งเสริมสุขภาพและป้องกันกลุ่มอาการออฟฟิศซินโดรมด้วยศาสตร์การแพทย์แผนไทย สำหรับบุคลากรสาธารณสุข
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#register">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              เริ่มทำแบบประเมิน
+            </a>
+            <a class="btn ghost" href="#dashboard">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5m0 14h16M8 17v-6m4 6V7m4 10v-3"/></svg>
+              ดู Dashboard ผู้ดูแล
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section band">
+        <div class="section-head">
+          <div>
+            <h2>โครงสร้างการทำงาน</h2>
+            <p>ลำดับหลักตั้งแต่ผู้เข้าร่วมทำแบบประเมินจนถึงการติดตามผลและสรุปรายงาน</p>
+          </div>
+        </div>
+        <div class="grid flow">
+          <article class="flow-step"><b>1</b><strong>ผู้เข้าร่วมทำแบบประเมินผ่าน Web App</strong><span>สแกน QR Code หรือเปิดลิงก์เฉพาะของหน่วยงาน</span></article>
+          <article class="flow-step"><b>2</b><strong>บันทึกข้อมูลเข้า Google Sheet</strong><span>รองรับ Apps Script endpoint หรือจัดเก็บในเครื่องเพื่อ demo</span></article>
+          <article class="flow-step"><b>3</b><strong>คำนวณคะแนนอัตโนมัติ</strong><span>รวมคะแนน risk, pain, activity และ ergonomics โดยแยก satisfaction เป็นข้อมูลประกอบ</span></article>
+          <article class="flow-step"><b>4</b><strong>Dashboard รายบุคคล/ภาพรวม</strong><span>แสดงระดับความเสี่ยง ค่าเฉลี่ย และ KPI</span></article>
+          <article class="flow-step"><b>5</b><strong>ติดตามผลและสรุปรายงาน</strong><span>ใช้ PreTest, PostTest และ FollowUp 2 สัปดาห์</span></article>
+        </div>
+      </section>
+
+      <section class="section" id="register">
+        <div class="section-head">
+          <div>
+            <h2>หน้า 2: ลงทะเบียน</h2>
+            <p>เก็บข้อมูลพื้นฐานผู้เข้าร่วมก่อนเริ่มแบบประเมิน</p>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" id="demoBtn">เติมข้อมูลตัวอย่าง</button>
+          </div>
+        </div>
+
+        <form class="panel grid form-grid" id="profileForm">
+          <label>รหัสผู้เข้าร่วม
+            <input id="participantId" required readonly>
+          </label>
+          <label>ชื่อ-สกุล
+            <input id="fullName" required placeholder="ชื่อและนามสกุล">
+          </label>
+          <label>อายุ
+            <input id="age" type="number" min="15" max="80" placeholder="ปี">
+          </label>
+          <label>เพศ
+            <select id="gender">
+              <option>ชาย</option>
+              <option>หญิง</option>
+            </select>
+          </label>
+          <label>น้ำหนัก
+            <input id="weight" type="number" min="20" max="200" step="0.1" placeholder="กิโลกรัม">
+          </label>
+          <label>ส่วนสูง
+            <input id="height" type="number" min="100" max="220" step="0.1" placeholder="เซนติเมตร">
+          </label>
+          <label>ดัชนีมวลกาย (BMI)
+            <input id="bmi" readonly placeholder="คำนวณอัตโนมัติ">
+            <span class="inline-note" id="bmiLevel">กรอกน้ำหนักและส่วนสูงเพื่อคำนวณ BMI</span>
+          </label>
+          <label>ตำแหน่งงาน
+            <select id="position">
+              <option>แพทย์</option>
+              <option>ทันตแพทย์</option>
+              <option>เภสัชกร</option>
+              <option>พยาบาลวิชาชีพ</option>
+              <option>นักวิชาการสาธารณสุข</option>
+              <option>แพทย์แผนไทย</option>
+              <option>เจ้าพนักงานสาธารณสุข</option>
+              <option>เจ้าหน้าที่ธุรการ</option>
+              <option>พนักงานบริการ</option>
+              <option>ผู้ช่วยทันตสาธารณสุข</option>
+              <option>ผู้ช่วยแพทย์แผนไทย</option>
+              <option>ผู้ช่วยพยาบาล</option>
+              <option>ผู้ช่วยเหลือคนไข้</option>
+              <option>แม่บ้าน</option>
+              <option>บุคคลทั่วไป</option>
+              <option>อื่นๆ</option>
+            </select>
+          </label>
+          <label class="other-field" id="positionOtherWrap">ระบุตำแหน่งงานอื่นๆ
+            <input id="positionOther" placeholder="ระบุตำแหน่งงาน">
+          </label><label>อายุการปฏิบัติงาน
+            <select id="tenure">
+              <option>น้อยกว่า 1 ปี</option>
+              <option>1–5 ปี</option>
+              <option>6–10 ปี</option>
+              <option>11–15 ปี</option>
+              <option>มากกว่า 15 ปี</option>
+            </select>
+          </label>
+          <label>Google Apps Script Web App URL
+            <input id="sheetEndpoint" value="https://script.google.com/macros/s/AKfycbzSy3rNZql-Leep_r1AXCWtMtzMXpfrW_OGvscHMcqZTQ5Wc5IfZEk2gg4yEPUO-TwJ/exec" placeholder="ใส่ URL เมื่อต้องการส่งเข้า Google Sheet จริง">
+          </label>
+        </form>
+      </section>
+
+      <section class="section band" id="assessment">
+        <div class="section-head">
+          <div>
+            <h2>หน้า 3: แบบประเมิน SPT-01 ถึง SPT-08</h2>
+            <p>ปรับคะแนนด้วยสไลเดอร์ ระบบจะคำนวณและแปลผลทันที</p>
+          </div>
+          <div class="actions">
+            <button class="btn primary" type="button" id="calculateBtn">คำนวณคะแนนอัตโนมัติ</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="assessment-toolbar">
+            <div class="progress-head">
+              <strong id="progressLabel">ความคืบหน้า 0%</strong>
+              <span id="progressDetail">ยังไม่ได้เริ่ม</span>
+            </div>
+            <div class="progress-track" aria-label="ความคืบหน้าแบบประเมิน">
+              <i class="progress-fill" id="progressFill"></i>
+            </div>
+            <div class="tab-actions">
+              <button class="btn" type="button" id="homeTopBtn">เมนู</button>
+              <button class="btn" type="button" id="prevTabBtn">ย้อนกลับ</button>
+              <button class="btn primary" type="button" id="nextTabBtn">ถัดไป</button>
+            </div>
+          </div>
+          <div class="tabs" id="tabs"></div>
+          <div class="question-list" id="questionList"></div>
+        </div>
+      </section>
+
+      <section class="section" id="result">
+        <div class="section-head">
+          <div>
+            <h2>หน้า 4: สรุปผลรายบุคคล</h2>
+            <p>ระบบแสดงผลทันที พร้อมคำแนะนำและตัวเลือกส่งข้อมูลเข้า Google Sheet</p>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" id="saveLocalBtn">บันทึก Demo</button>
+            <button class="btn primary" type="button" id="sendSheetBtn">ส่งข้อมูลเข้า Google Sheet</button>
+            <button class="btn" type="button" id="printResultBtn">พิมพ์/บันทึก PDF</button>
+            <button class="btn" type="button" id="downloadJpgBtn">ดาวน์โหลด JPG</button>
+          </div>
+        </div>
+
+        <div class="grid result-grid">
+          <article class="result-card">
+            <div class="score-ring" id="riskRing" style="--score: 65">
+              <div>
+                <strong id="riskScore">65</strong>
+                <span>คะแนนความเสี่ยง /100</span>
+              </div>
+            </div>
+            <h3>ระดับความเสี่ยง</h3>
+            <span class="level" id="riskLevel">ความเสี่ยงสูง</span>
+            <div class="advice" id="adviceText">
+              เข้าร่วมโปรแกรม SMART POSTURE THAI และติดตามผลภายใน 2 สัปดาห์
+            </div>
+          </article>
+
+          <article class="result-card">
+            <h3>ผลแปลทันที</h3>
+            <div class="bar-list">
+              <div class="bar-row"><span>Pain Score</span><div class="bar"><i id="painBar" style="--w:70%"></i></div><strong id="painScore">7/10</strong></div>
+              <div class="bar-row"><span>Office Risk</span><div class="bar"><i id="officeBar" style="--w:68%"></i></div><strong id="officeScore">68</strong></div>
+              <div class="bar-row"><span>Ergonomics</span><div class="bar"><i id="ergoBar" style="--w:58%"></i></div><strong id="ergoScore">58</strong></div>
+              <div class="bar-row"><span>Activity</span><div class="bar"><i id="activityBar" style="--w:60%"></i></div><strong id="activityScore">60</strong></div>
+              <div class="bar-row"><span>Satisfaction</span><div class="bar"><i id="satisBar" style="--w:82%"></i></div><strong id="satisScore">82</strong></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section band" id="dashboard">
+        <div class="section-head">
+          <div>
+            <h2>หน้า 5: Dashboard ผู้ดูแล</h2>
+            <p>สรุปจำนวนผู้ประเมิน ค่าเฉลี่ยก่อน-หลัง กลุ่มเสี่ยง Pain Score ความพึงพอใจ และ KPI</p>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" id="exportCsvBtn">ดาวน์โหลด CSV</button>
+            <button class="btn" type="button" id="clearBtn">ล้างข้อมูล Demo</button>
+          </div>
+        </div>
+
+        <div class="grid metrics">
+          <article class="metric"><span>จำนวนผู้ประเมินทั้งหมด</span><strong id="mTotal">0</strong></article>
+          <article class="metric"><span>ค่าเฉลี่ย PreTest</span><strong id="mPre">0</strong></article>
+          <article class="metric"><span>ค่าเฉลี่ย PostTest</span><strong id="mPost">0</strong></article>
+          <article class="metric"><span>Pain Score เฉลี่ย</span><strong id="mPain">0</strong></article>
+          <article class="metric"><span>ความพึงพอใจเฉลี่ย</span><strong id="mSatis">0</strong></article>
+          <article class="metric"><span>KPI ผ่าน/ไม่ผ่าน</span><strong id="mKpi">0%</strong></article>
+        </div>
+
+        <div class="grid result-grid" style="margin-top:16px">
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <h2>กลุ่มเสี่ยง</h2>
+                <p>ต่ำ / ปานกลาง / สูง จากคะแนนความเสี่ยงรวม</p>
+              </div>
+            </div>
+            <div class="bar-list">
+              <div class="bar-row"><span>ต่ำ</span><div class="bar"><i id="lowRiskBar" style="--w:0%"></i></div><strong id="lowRiskText">0</strong></div>
+              <div class="bar-row"><span>ปานกลาง</span><div class="bar"><i id="midRiskBar" style="--w:0%"></i></div><strong id="midRiskText">0</strong></div>
+              <div class="bar-row"><span>สูง</span><div class="bar"><i id="highRiskBar" style="--w:0%"></i></div><strong id="highRiskText">0</strong></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <h2>ข้อมูลล่าสุด</h2>
+                <p>รายการที่บันทึกผ่าน Web App นี้</p>
+              </div>
+            </div>
+            <table class="sheet-table">
+              <thead>
+                <tr><th>รหัส</th><th>ชื่อ</th><th>รอบ</th><th>Risk</th><th>ระดับ</th></tr>
+              </thead>
+              <tbody id="recordRows"></tbody>
+            </table>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" id="sheets">
+        <div class="section-head">
+          <div>
+            <h2>โครงสร้าง Google Sheet</h2>
+            <p>ชีตหลักที่ควรสร้างเพื่อรองรับการบันทึก คำนวณ และเชื่อม Dashboard</p>
+          </div>
+          <div class="actions">
+            <button class="btn primary" type="button" id="downloadAppsScriptBtn">ดาวน์โหลด Apps Script</button>
+          </div>
+        </div>
+        <section class="panel">
+          <table class="sheet-table">
+            <thead>
+              <tr><th>Sheet</th><th>ใช้ทำอะไร</th><th>คอลัมน์แนะนำ</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Participants</strong></td><td>ข้อมูลผู้เข้าร่วม</td><td>ParticipantID, FullName, Age, Gender, Position, WorkHours, ComputerHours</td></tr>
+              <tr><td><strong>PreTest</strong></td><td>คะแนนก่อนดำเนินโครงการ</td><td>ParticipantID, Timestamp, RiskScore, PainScore, Level, Advice</td></tr>
+              <tr><td><strong>PostTest</strong></td><td>คะแนนหลังดำเนินโครงการ</td><td>ParticipantID, Timestamp, RiskScore, PainScore, Satisfaction, KPI</td></tr>
+              <tr><td><strong>FollowUp</strong></td><td>ติดตามผล 2 สัปดาห์</td><td>ParticipantID, FollowUpDate, PainScore, ActivityScore, Note</td></tr>
+              <tr><td><strong>Scoring</strong></td><td>สูตรคำนวณคะแนน</td><td>Domain, QuestionCode, Weight, MinScore, MaxScore, Interpretation</td></tr>
+              <tr><td><strong>Dashboard_Data</strong></td><td>ตารางสรุปสำหรับ Dashboard</td><td>Total, PreAvg, PostAvg, LowRisk, MidRisk, HighRisk, AvgPain, AvgSatisfaction, KPI</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+
+
+    const storageKey = "smart-posture-thai-records";
+    const sheetEndpointKey = "smart-posture-thai-sheet-endpoint";
+    const defaultSheetEndpoint = "https://script.google.com/macros/s/AKfycbzSy3rNZql-Leep_r1AXCWtMtzMXpfrW_OGvscHMcqZTQ5Wc5IfZEk2gg4yEPUO-TwJ/exec";
+    const assessmentForms = [
+    {
+        "id": "SPT-01",
+        "title": "SPT-01 แบบบันทึกข้อมูลทั่วไปผู้เข้าร่วมโครงการ",
+        "description": "โปรดกรอกข้อมูลตามความเป็นจริง ข้อมูลทั้งหมดจะใช้เพื่อการประเมินความเสี่ยง ติดตามผล และพัฒนาการดูแลสุขภาพของผู้เข้าร่วมโครงการ โดยข้อมูลจะถูกเก็บเป็นความลับและใช้เพื่อวัตถุประสงค์ของโครงการเท่านั้น",
+        "maxScore": 0,
+        "sections": [
+            {
+                "title": "ข้อมูลการประเมิน",
+                "fields": [
+                    {
+                        "key": "spt01_assessment_date",
+                        "label": "วันที่ประเมิน",
+                        "type": "date",
+                        "placeholder": "วว/ดด/ปป"
+                    },
+                    {
+                        "key": "spt01_assessment_round",
+                        "label": "ครั้งที่ประเมิน",
+                        "type": "select",
+                        "options": [
+                            "ครั้งที่ 1",
+                            "ครั้งที่ 2",
+                            "ติดตามผล"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 1 ลักษณะการทำงาน",
+                "fields": [
+                    {
+                        "key": "spt01_work_hours",
+                        "label": "ชั่วโมงการทำงานเฉลี่ยต่อวัน",
+                        "type": "select",
+                        "options": [
+                            "น้อยกว่า 6 ชั่วโมง",
+                            "6–8 ชั่วโมง",
+                            "มากกว่า 8 ชั่วโมง"
+                        ]
+                    },
+                    {
+                        "key": "spt01_computer_hours",
+                        "label": "ระยะเวลาการใช้คอมพิวเตอร์ต่อวัน",
+                        "type": "select",
+                        "options": [
+                            "น้อยกว่า 2 ชั่วโมง",
+                            "2–4 ชั่วโมง",
+                            "4–6 ชั่วโมง",
+                            "มากกว่า 6 ชั่วโมง"
+                        ]
+                    },
+                    {
+                        "key": "spt01_mobile_hours",
+                        "label": "ระยะเวลาการใช้โทรศัพท์มือถือเพื่อการทำงาน",
+                        "type": "select",
+                        "options": [
+                            "น้อยกว่า 1 ชั่วโมง",
+                            "1–2 ชั่วโมง",
+                            "2–4 ชั่วโมง",
+                            "มากกว่า 4 ชั่วโมง"
+                        ]
+                    },
+                    {
+                        "key": "spt01_work_type",
+                        "label": "ลักษณะงานที่ปฏิบัติเป็นประจำ (เลือกได้มากกว่า 1 ข้อ)",
+                        "type": "checkboxGroup",
+                        "options": [
+                            "พิมพ์เอกสาร",
+                            "ใช้คอมพิวเตอร์",
+                            "ใช้โทรศัพท์",
+                            "ตรวจรักษาผู้ป่วย",
+                            "ยกหรือเคลื่อนย้ายวัสดุ",
+                            "ขับรถ",
+                            "ประชุม",
+                            "งานภาคสนาม",
+                            "อื่น ๆ __________________"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 2 พฤติกรรมสุขภาพ",
+                "fields": [
+                    {
+                        "key": "spt01_exercise",
+                        "label": "การออกกำลังกาย",
+                        "type": "select",
+                        "options": [
+                            "ไม่ออกกำลังกาย",
+                            "1–2 วัน/สัปดาห์",
+                            "3–4 วัน/สัปดาห์",
+                            "5 วัน/สัปดาห์ขึ้นไป"
+                        ]
+                    },
+                    {
+                        "key": "spt01_sleep",
+                        "label": "ระยะเวลาการนอนเฉลี่ย",
+                        "type": "select",
+                        "options": [
+                            "น้อยกว่า 6 ชั่วโมง",
+                            "6–7 ชั่วโมง",
+                            "7–8 ชั่วโมง",
+                            "มากกว่า 8 ชั่วโมง"
+                        ]
+                    },
+                    {
+                        "key": "spt01_break",
+                        "label": "การพักระหว่างทำงาน",
+                        "type": "select",
+                        "options": [
+                            "ทุก 30 นาที",
+                            "ทุก 1 ชั่วโมง",
+                            "ทุก 2 ชั่วโมง",
+                            "แทบไม่ได้พัก"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 3 ประวัติสุขภาพ",
+                "fields": [
+                    {
+                        "key": "spt01_disease",
+                        "label": "โรคประจำตัว",
+                        "type": "radioDetail",
+                        "options": [
+                            "ไม่มี",
+                            "มี"
+                        ],
+                        "detailPlaceholder": "ความดันโลหิตสูง, เบาหวาน, ไขมันในเลือดสูง, โรคกระดูกและข้อ, อื่น ๆ __________________"
+                    },
+                    {
+                        "key": "spt01_office_history",
+                        "label": "เคยได้รับการวินิจฉัยว่าเป็น Office Syndrome",
+                        "type": "select",
+                        "options": [
+                            "ไม่เคย",
+                            "เคย"
+                        ]
+                    },
+                    {
+                        "key": "spt01_treatment",
+                        "label": "เคยได้รับการรักษาอาการปวดคอ บ่า ไหล่",
+                        "type": "radioDetail",
+                        "options": [
+                            "ไม่เคย",
+                            "เคย"
+                        ],
+                        "detailPlaceholder": "รับประทานยา, นวดไทย, กายภาพบำบัด, ฝังเข็ม, ประคบสมุนไพร, อื่น ๆ __________________"
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 4 เป้าหมายของผู้เข้าร่วม",
+                "fields": [
+                    {
+                        "key": "spt01_goal",
+                        "label": "ท่านต้องการให้โครงการช่วยเรื่องใด (ระบุ)",
+                        "type": "textarea",
+                        "placeholder": "ระบุ"
+                    }
+                ]
+            },
+            {
+                "title": "สำหรับเจ้าหน้าที่",
+                "fields": [
+                    {
+                        "key": "spt01_eligible",
+                        "label": "ผู้เข้าร่วมมีคุณสมบัติเข้าร่วมโครงการ",
+                        "type": "select",
+                        "options": [
+                            "ครบ",
+                            "ไม่ครบ"
+                        ]
+                    },
+                    {
+                        "key": "spt01_staff_note",
+                        "label": "หมายเหตุ",
+                        "type": "textarea"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-02",
+        "title": "SPT-02 แบบประเมินความเสี่ยงต่อการเกิดกลุ่มอาการออฟฟิศซินโดรม",
+        "description": "โปรดประเมินพฤติกรรมการทำงานของท่านในช่วง 1 เดือนที่ผ่านมา โดยเลือกคำตอบที่ตรงกับความเป็นจริงมากที่สุด",
+        "maxScore": 100,
+        "sections": [
+            {
+                "title": "ด้านที่ 1 พฤติกรรมการทำงาน (Working Behavior)",
+                "questions": [
+                    {
+                        "key": "spt02_q1",
+                        "text": "นั่งทำงานต่อเนื่องเกิน 2 ชั่วโมง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q2",
+                        "text": "ก้มคอทำงานเป็นเวลานาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q3",
+                        "text": "ยกไหล่หรือเกร็งบ่าขณะทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q4",
+                        "text": "ใช้เมาส์ต่อเนื่องนานกว่า 1 ชั่วโมง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q5",
+                        "text": "พิมพ์คีย์บอร์ดต่อเนื่องเป็นเวลานาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    }
+                ]
+            },
+            {
+                "title": "ด้านที่ 2 การยศาสตร์ของสถานที่ทำงาน (Ergonomic Risk)",
+                "questions": [
+                    {
+                        "key": "spt02_q6",
+                        "text": "ระดับจอคอมพิวเตอร์ไม่เหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q7",
+                        "text": "เก้าอี้ไม่รองรับหลังหรือเอว",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q8",
+                        "text": "โต๊ะทำงานสูงหรือต่ำเกินไป",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q9",
+                        "text": "วางเมาส์หรือคีย์บอร์ดไกลเกินเอื้อม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q10",
+                        "text": "พื้นที่ทำงานคับแคบหรือจัดวางอุปกรณ์ไม่เหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    }
+                ]
+            },
+            {
+                "title": "ด้านที่ 3 พฤติกรรมสุขภาพ (Health Behavior)",
+                "questions": [
+                    {
+                        "key": "spt02_q11",
+                        "text": "ไม่ลุกเปลี่ยนอิริยาบถระหว่างทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q12",
+                        "text": "ไม่ออกกำลังกายสม่ำเสมอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q13",
+                        "text": "พักผ่อนไม่เพียงพอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q14",
+                        "text": "ดื่มน้ำน้อยระหว่างวัน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q15",
+                        "text": "มีความเครียดจากการทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    }
+                ]
+            },
+            {
+                "title": "ด้านที่ 4 อาการเตือน (Early Symptoms)",
+                "questions": [
+                    {
+                        "key": "spt02_q16",
+                        "text": "ปวดคอหลังทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q17",
+                        "text": "ปวดบ่าหรือไหล่",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q18",
+                        "text": "ปวดหลังส่วนบนหรือหลังส่วนล่าง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q19",
+                        "text": "ชาหรือปวดร้าวลงแขน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    },
+                    {
+                        "key": "spt02_q20",
+                        "text": "อาการรบกวนการทำงานหรือชีวิตประจำวัน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0,
+                        "reverse": false
+                    }
+                ]
+            },
+            {
+                "title": "ด้านที่ 5 การดูแลตนเอง (Self-care Behavior)",
+                "questions": [
+                    {
+                        "key": "spt02_q21",
+                        "text": "ยืดเหยียดระหว่างทำงานเป็นประจำ (คิดคะแนนกลับ)",
+                        "min": 0,
+                        "max": 4,
+                        "default": 2,
+                        "reverse": true
+                    },
+                    {
+                        "key": "spt02_q22",
+                        "text": "ปรับท่านั่งเมื่อรู้สึกเมื่อย (คิดคะแนนกลับ)",
+                        "min": 0,
+                        "max": 4,
+                        "default": 2,
+                        "reverse": true
+                    },
+                    {
+                        "key": "spt02_q23",
+                        "text": "ใช้หลักการยศาสตร์ในการทำงาน (คิดคะแนนกลับ)",
+                        "min": 0,
+                        "max": 4,
+                        "default": 2,
+                        "reverse": true
+                    },
+                    {
+                        "key": "spt02_q24",
+                        "text": "ออกกำลังกายเพื่อเสริมความแข็งแรงของกล้ามเนื้อ (คิดคะแนนกลับ)",
+                        "min": 0,
+                        "max": 4,
+                        "default": 2,
+                        "reverse": true
+                    },
+                    {
+                        "key": "spt02_q25",
+                        "text": "ดูแลสุขภาพด้วยการนวด ยืดเหยียด หรือฤๅษีดัดตน (คิดคะแนนกลับ)",
+                        "min": 0,
+                        "max": 4,
+                        "default": 2,
+                        "reverse": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-03",
+        "title": "SPT-03 แบบประเมินอาการระบบกล้ามเนื้อและกระดูกจากการทำงาน",
+        "description": "โปรดประเมินอาการที่เกิดขึ้นจากการทำงาน ในช่วง 7 วันที่ผ่านมา โดยเลือกคำตอบที่ตรงกับอาการของท่านมากที่สุด",
+        "maxScore": 60,
+        "sections": [
+            {
+                "title": "ส่วนที่ 1 การประเมินอาการตามตำแหน่งของร่างกาย",
+                "questions": [
+                    {
+                        "key": "spt03_body_1",
+                        "text": "คอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_2",
+                        "text": "บ่า",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_3",
+                        "text": "ไหล่ซ้าย",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_4",
+                        "text": "ไหล่ขวา",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_5",
+                        "text": "หลังส่วนบน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_6",
+                        "text": "หลังส่วนล่าง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_7",
+                        "text": "ข้อศอก",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_8",
+                        "text": "ข้อมือ/มือ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_9",
+                        "text": "สะโพก/ต้นขา",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_body_10",
+                        "text": "เข่า",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 2 ลักษณะของอาการ",
+                "fields": [
+                    {
+                        "key": "spt03_symptom_type",
+                        "label": "เลือกได้มากกว่า 1 ข้อ",
+                        "type": "textarea",
+                        "placeholder": "ปวด, ตึง, เมื่อยล้า, ชา, ปวดร้าว, กล้ามเนื้อเกร็ง, ขยับลำบาก, อื่น ๆ ______________________"
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 3 ความถี่ของอาการ",
+                "fields": [
+                    {
+                        "key": "spt03_frequency",
+                        "label": "อาการเกิดขึ้นบ่อยเพียงใด",
+                        "type": "select",
+                        "options": [
+                            "ไม่เคย",
+                            "1–2 วัน/สัปดาห์",
+                            "3–4 วัน/สัปดาห์",
+                            "5–7 วัน/สัปดาห์",
+                            "ทุกวัน"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 4 ระยะเวลาที่มีอาการ",
+                "fields": [
+                    {
+                        "key": "spt03_duration",
+                        "label": "ส่วนที่ 4 ระยะเวลาที่มีอาการ",
+                        "type": "select",
+                        "options": [
+                            "น้อยกว่า 30 นาที",
+                            "30 นาที–1 ชั่วโมง",
+                            "1–2 ชั่วโมง",
+                            "มากกว่า 2 ชั่วโมง",
+                            "ตลอดวัน"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 6 ปัจจัยที่ทำให้อาการมากขึ้น",
+                "fields": [
+                    {
+                        "key": "spt03_aggravating",
+                        "label": "เลือกได้มากกว่า 1 ข้อ",
+                        "type": "textarea",
+                        "placeholder": "นั่งนาน, ใช้คอมพิวเตอร์, ใช้เมาส์, ใช้โทรศัพท์, ก้มคอ, ยกของ, ขับรถ, ความเครียด, นอนพักไม่เพียงพอ, อื่น ๆ ______________________"
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 7 วิธีที่ช่วยให้อาการดีขึ้น",
+                "fields": [
+                    {
+                        "key": "spt03_relief",
+                        "label": "เลือกได้มากกว่า 1 ข้อ",
+                        "type": "textarea",
+                        "placeholder": "พัก, ยืดเหยียด, นวดไทย, ประคบสมุนไพร, รับประทานยา, กายภาพบำบัด, ออกกำลังกาย, ฤๅษีดัดตน, อื่น ๆ ______________________"
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 8 แผนภาพตำแหน่งอาการ (Body Pain Map)",
+                "fields": [
+                    {
+                        "key": "spt03_body_map",
+                        "label": "ระบายสีหรือทำเครื่องหมาย (✓) บริเวณที่มีอาการปวด เมื่อย ชา หรือปวดร้าว",
+                        "type": "textarea",
+                        "placeholder": "(ในไฟล์ Word จะใช้ภาพร่างด้านหน้าและด้านหลังของร่างกาย พร้อมช่องสำหรับระบุตำแหน่งอาการ)"
+                    }
+                ]
+            },
+            {
+                "title": "ส่วนที่ 5 ผลกระทบต่อการทำงาน",
+                "questions": [
+                    {
+                        "key": "spt03_impact_1",
+                        "text": "ทำงานได้ตามปกติ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_impact_2",
+                        "text": "สมาธิลดลงจากอาการปวด",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_impact_3",
+                        "text": "ทำงานช้าลง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_impact_4",
+                        "text": "ต้องพักระหว่างทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt03_impact_5",
+                        "text": "ต้องหยุดงานหรือเปลี่ยนงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-04",
+        "title": "SPT-04 แบบประเมินการยศาสตร์ของสถานที่ทำงาน",
+        "description": "ให้ผู้ประเมินสังเกตสภาพการทำงานจริงของผู้เข้าร่วมโครงการ แล้วเลือกคะแนนที่ตรงกับสภาพการทำงานมากที่สุด",
+        "maxScore": 120,
+        "sections": [
+            {
+                "title": "เก้าอี้",
+                "questions": [
+                    {
+                        "key": "spt04_1_1",
+                        "text": "ความสูงของเก้าอี้เหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_1_2",
+                        "text": "เท้าวางราบกับพื้น",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_1_3",
+                        "text": "เข่างอประมาณ 90°",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_1_4",
+                        "text": "พนักพิงรองรับหลังส่วนล่าง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_1_5",
+                        "text": "นั่งเต็มพื้นที่เบาะ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "โต๊ะทำงาน",
+                "questions": [
+                    {
+                        "key": "spt04_2_1",
+                        "text": "ความสูงของโต๊ะเหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_2_2",
+                        "text": "มีพื้นที่วางขาเพียงพอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_2_3",
+                        "text": "อุปกรณ์อยู่ในระยะเอื้อมถึง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_2_4",
+                        "text": "พื้นที่ทำงานเป็นระเบียบ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_2_5",
+                        "text": "ไม่มีสิ่งกีดขวางใต้โต๊ะ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "จอคอมพิวเตอร์",
+                "questions": [
+                    {
+                        "key": "spt04_3_1",
+                        "text": "ระดับขอบบนของจออยู่ระดับสายตา",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_3_2",
+                        "text": "ระยะห่างประมาณ 50–70 ซม.",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_3_3",
+                        "text": "จออยู่ตรงกับผู้ใช้งาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_3_4",
+                        "text": "ไม่มีแสงสะท้อนรบกวน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_3_5",
+                        "text": "มองจอได้โดยไม่ก้มหรือเงยคอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "คีย์บอร์ดและเมาส์",
+                "questions": [
+                    {
+                        "key": "spt04_4_1",
+                        "text": "คีย์บอร์ดอยู่ใกล้ลำตัว",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_4_2",
+                        "text": "เมาส์อยู่ระดับเดียวกับคีย์บอร์ด",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_4_3",
+                        "text": "ข้อมืออยู่ในแนวตรง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_4_4",
+                        "text": "ศอกงอประมาณ 90°",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_4_5",
+                        "text": "ไหล่ไม่ยกขณะใช้งาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "ท่าทางการทำงาน",
+                "questions": [
+                    {
+                        "key": "spt04_5_1",
+                        "text": "ศีรษะอยู่ในแนวตรง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_5_2",
+                        "text": "หลังตรงไม่โค้งงอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_5_3",
+                        "text": "ไหล่ผ่อนคลาย",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_5_4",
+                        "text": "แขนแนบลำตัว",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_5_5",
+                        "text": "เปลี่ยนอิริยาบถระหว่างทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            },
+            {
+                "title": "สิ่งแวดล้อม",
+                "questions": [
+                    {
+                        "key": "spt04_6_1",
+                        "text": "แสงสว่างเพียงพอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_6_2",
+                        "text": "อุณหภูมิห้องเหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_6_3",
+                        "text": "เสียงรบกวนอยู่ในระดับเหมาะสม",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_6_4",
+                        "text": "มีพื้นที่เคลื่อนไหวเพียงพอ",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt04_6_5",
+                        "text": "มีพื้นที่สำหรับยืดเหยียดร่างกาย",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-05",
+        "title": "SPT-05 แบบประเมินระดับความปวด",
+        "description": "ให้ผู้รับการประเมินให้คะแนนความปวดที่รู้สึกในขณะประเมิน โดยใช้ ตัวเลข 0–10 คะแนน",
+        "maxScore": 10,
+        "sections": [
+            {
+                "title": "คะแนนความปวดปัจจุบัน",
+                "questions": [
+                    {
+                        "key": "painScore",
+                        "text": "คะแนนความปวดปัจจุบัน",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-06",
+        "title": "SPT-06 แบบประเมินความสามารถในการทำกิจกรรม",
+        "description": "ให้ผู้รับการประเมินให้คะแนน ความสามารถในการทำกิจกรรมในปัจจุบัน โดยอ้างอิงจากอาการในช่วง 7 วันที่ผ่านมา",
+        "maxScore": 150,
+        "sections": [
+            {
+                "title": "กิจกรรม 1-5",
+                "questions": [
+                    {
+                        "key": "spt06_act_1",
+                        "text": "นั่งทำงานต่อเนื่อง 30 นาที",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_2",
+                        "text": "นั่งทำงานต่อเนื่อง 1 ชั่วโมง",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_3",
+                        "text": "ใช้คอมพิวเตอร์",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_4",
+                        "text": "ใช้เมาส์และคีย์บอร์ด",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_5",
+                        "text": "ใช้โทรศัพท์ในการทำงาน",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    }
+                ]
+            },
+            {
+                "title": "กิจกรรม 6-10",
+                "questions": [
+                    {
+                        "key": "spt06_act_6",
+                        "text": "ก้มศีรษะ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_7",
+                        "text": "เงยศีรษะ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_8",
+                        "text": "หันคอซ้าย–ขวา",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_9",
+                        "text": "ยกแขนเหนือศีรษะ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_10",
+                        "text": "เอื้อมหยิบสิ่งของ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    }
+                ]
+            },
+            {
+                "title": "กิจกรรม 11-15",
+                "questions": [
+                    {
+                        "key": "spt06_act_11",
+                        "text": "ขับรถ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_12",
+                        "text": "ทำงานบ้าน",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_13",
+                        "text": "ยกของน้ำหนักประมาณ 5 กิโลกรัม",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_14",
+                        "text": "ออกกำลังกาย",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    },
+                    {
+                        "key": "spt06_act_15",
+                        "text": "นอนหลับได้ตามปกติ",
+                        "min": 0,
+                        "max": 10,
+                        "default": 7
+                    }
+                ]
+            },
+            {
+                "title": "ผลกระทบจากอาการ (ประเมินแยก ไม่รวมคะแนน SPT-06 /150)",
+                "questions": [
+                    {
+                        "key": "spt06_impact_1",
+                        "text": "ประสิทธิภาพการทำงานลดลง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt06_impact_2",
+                        "text": "สมาธิในการทำงานลดลง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt06_impact_3",
+                        "text": "ต้องหยุดพักระหว่างทำงาน",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt06_impact_4",
+                        "text": "ทำกิจกรรมได้ช้าลง",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    },
+                    {
+                        "key": "spt06_impact_5",
+                        "text": "ส่งผลต่อคุณภาพชีวิต",
+                        "min": 0,
+                        "max": 4,
+                        "default": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-07",
+        "title": "SPT-07 แบบประเมินความพึงพอใจต่อการใช้นวัตกรรม SMART POSTURE THAI",
+        "description": "แบบประเมินฉบับนี้จัดทำขึ้นเพื่อประเมินระดับความพึงพอใจของผู้เข้าร่วมโครงการที่มีต่อการใช้นวัตกรรม SMART POSTURE THAI หลังเสร็จสิ้นการเข้าร่วมโปรแกรม",
+        "maxScore": 75,
+        "sections": [
+            {
+                "title": "ตอนที่ 1 การให้บริการ",
+                "questions": [
+                    {
+                        "key": "spt07_service_1",
+                        "text": "การต้อนรับและการให้บริการของเจ้าหน้าที่",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_service_2",
+                        "text": "ความสุภาพและเอาใจใส่ของผู้ให้บริการ",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_service_3",
+                        "text": "การอธิบายขั้นตอนการเข้าร่วมโครงการเข้าใจง่าย",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_service_4",
+                        "text": "ระยะเวลาในการให้บริการเหมาะสม",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_service_5",
+                        "text": "ความสะดวกในการเข้าร่วมกิจกรรม",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    }
+                ]
+            },
+            {
+                "title": "ตอนที่ 2 เครื่องมือและกิจกรรม",
+                "questions": [
+                    {
+                        "key": "spt07_tool_1",
+                        "text": "แบบประเมินใช้งานง่าย",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_tool_2",
+                        "text": "กิจกรรมมีความเหมาะสมกับการทำงาน",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_tool_3",
+                        "text": "ท่าฤๅษีดัดตนและการยืดเหยียดปฏิบัติตามได้ง่าย",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_tool_4",
+                        "text": "การนวดไทยช่วยลดอาการได้",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_tool_5",
+                        "text": "สามารถนำความรู้ไปใช้ดูแลตนเองได้",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    }
+                ]
+            },
+            {
+                "title": "ตอนที่ 3 ผลลัพธ์ที่ได้รับ",
+                "questions": [
+                    {
+                        "key": "spt07_outcome_1",
+                        "text": "อาการปวดลดลงหลังเข้าร่วมโครงการ",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_outcome_2",
+                        "text": "ทำงานได้สะดวกขึ้น",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_outcome_3",
+                        "text": "มีความรู้เรื่องการป้องกัน Office Syndrome มากขึ้น",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_outcome_4",
+                        "text": "มีแรงจูงใจในการดูแลสุขภาพตนเอง",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    },
+                    {
+                        "key": "spt07_outcome_5",
+                        "text": "โดยภาพรวมพึงพอใจต่อโครงการ SMART POSTURE THAI",
+                        "min": 1,
+                        "max": 5,
+                        "default": 4
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "SPT-08",
+        "title": "SPT-08 สรุปผลและวางแผนการดูแลรายบุคคล",
+        "description": "สรุปผลการประเมินจาก SPT-02 ถึง SPT-07 พร้อมจัดระดับความเสี่ยงโดยรวมและวางแผนการดูแลรายบุคคล",
+        "maxScore": 0,
+        "sections": [
+            {
+                "title": "ปัญหาสำคัญที่พบ",
+                "fields": [
+                    {
+                        "key": "spt08_key_problems",
+                        "label": "ปัญหาสำคัญที่พบ",
+                        "type": "recommendationList",
+                        "options": [
+                            "ปวดคอ",
+                            "ปวดบ่า",
+                            "ปวดไหล่",
+                            "ปวดหลังส่วนบน",
+                            "ปวดหลังส่วนล่าง",
+                            "กล้ามเนื้อตึง",
+                            "ชาหรือปวดร้าว",
+                            "ท่าทางการทำงานไม่เหมาะสม",
+                            "สถานที่ทำงานไม่เหมาะสม",
+                            "ขาดการออกกำลังกาย",
+                            "ไม่ยืดเหยียดระหว่างทำงาน",
+                            "ความเครียดจากการทำงาน",
+                            "อื่น ๆ ระบุ __________________"
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "แผนการดูแลรายบุคคล (Individual Care Plan)",
+                "fields": [
+                    {
+                        "key": "spt08_behavior_plan",
+                        "label": "การปรับพฤติกรรม",
+                        "type": "recommendationList",
+                        "options": [
+                            "ปรับท่านั่งทำงาน",
+                            "ปรับระดับจอคอมพิวเตอร์",
+                            "ปรับเก้าอี้",
+                            "ปรับตำแหน่งเมาส์และคีย์บอร์ด",
+                            "ลุกเปลี่ยนอิริยาบถทุก 30–60 นาที",
+                            "ดื่มน้ำให้เพียงพอ",
+                            "เพิ่มกิจกรรมทางกาย"
+                        ]
+                    },
+                    {
+                        "key": "spt08_program_plan",
+                        "label": "โปรแกรม SMART POSTURE THAI",
+                        "type": "recommendationList",
+                        "options": [
+                            "ฝึกยืดเหยียดกล้ามเนื้อ",
+                            "ฝึกฤๅษีดัดตน",
+                            "นวดไทย",
+                            "นวดกดจุด",
+                            "ประคบสมุนไพร",
+                            "สอนการนวดตนเอง",
+                            "ให้เอกสารความรู้",
+                            "รับชมวิดีโอการฝึกผ่าน QR Code"
+                        ]
+                    },
+                    {
+                        "key": "spt08_followup_plan",
+                        "label": "การติดตามผล",
+                        "type": "recommendationList",
+                        "options": [
+                            "ติดตามหลัง 2 สัปดาห์",
+                            "ติดตามหลัง 1 เดือน",
+                            "ติดตามหลัง 3 เดือน",
+                            "ประเมินซ้ำทุก 6 เดือน"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+    const textMap = {
+      "noScore": "\u0e44\u0e21\u0e48\u0e04\u0e34\u0e14\u0e04\u0e30\u0e41\u0e19\u0e19",
+      "reverseNote": "\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e2b\u0e15\u0e38: \u0e02\u0e49\u0e2d 21\u201325 \u0e40\u0e1b\u0e47\u0e19\u0e02\u0e49\u0e2d\u0e40\u0e0a\u0e34\u0e07\u0e1a\u0e27\u0e01 \u0e43\u0e2b\u0e49\u0e04\u0e34\u0e14\u0e04\u0e30\u0e41\u0e19\u0e19\u0e01\u0e25\u0e31\u0e1a (4=0, 3=1, 2=2, 1=3, 0=4)",
+      "scoreWord": "\u0e04\u0e30\u0e41\u0e19\u0e19\u0e40\u0e15\u0e47\u0e21",
+      "riskRanges": [
+            [
+                  20,
+                  "\ud83d\udfe2 \u0e15\u0e48\u0e33"
+            ],
+            [
+                  40,
+                  "\ud83d\udfe1 \u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22"
+            ],
+            [
+                  60,
+                  "\ud83d\udfe0 \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07"
+            ],
+            [
+                  80,
+                  "\ud83d\udd34 \u0e2a\u0e39\u0e07"
+            ],
+            [
+                  100,
+                  "\ud83d\udd34\ud83d\udd34 \u0e2a\u0e39\u0e07\u0e21\u0e32\u0e01"
+            ]
+      ],
+      "symptomRanges": [
+            [
+                  12,
+                  "\ud83d\udfe2 \u0e44\u0e21\u0e48\u0e21\u0e35\u0e2d\u0e32\u0e01\u0e32\u0e23"
+            ],
+            [
+                  24,
+                  "\ud83d\udfe1 \u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22"
+            ],
+            [
+                  36,
+                  "\ud83d\udfe0 \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07"
+            ],
+            [
+                  48,
+                  "\ud83d\udd34 \u0e21\u0e32\u0e01"
+            ],
+            [
+                  60,
+                  "\ud83d\udd34\ud83d\udd34 \u0e23\u0e38\u0e19\u0e41\u0e23\u0e07"
+            ]
+      ],
+      "ergoRanges": [
+            [
+                  24,
+                  "\ud83d\udfe2 \u0e14\u0e35"
+            ],
+            [
+                  48,
+                  "\ud83d\udfe1 \u0e04\u0e27\u0e23\u0e1b\u0e23\u0e31\u0e1a\u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22"
+            ],
+            [
+                  72,
+                  "\ud83d\udfe0 \u0e04\u0e27\u0e23\u0e1b\u0e23\u0e31\u0e1a\u0e1b\u0e23\u0e38\u0e07"
+            ],
+            [
+                  96,
+                  "\ud83d\udd34 \u0e04\u0e27\u0e23\u0e41\u0e01\u0e49\u0e44\u0e02\u0e40\u0e23\u0e48\u0e07\u0e14\u0e48\u0e27\u0e19"
+            ],
+            [
+                  120,
+                  "\ud83d\udd34\ud83d\udd34 \u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e2a\u0e39\u0e07\u0e21\u0e32\u0e01"
+            ]
+      ],
+      "painRanges": [
+            [
+                  0,
+                  "\ud83d\udfe2 \u0e44\u0e21\u0e48\u0e1b\u0e27\u0e14"
+            ],
+            [
+                  3,
+                  "\ud83d\udfe2 \u0e1b\u0e27\u0e14\u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22"
+            ],
+            [
+                  6,
+                  "\ud83d\udfe1 \u0e1b\u0e27\u0e14\u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07"
+            ],
+            [
+                  9,
+                  "\ud83d\udfe0 \u0e1b\u0e27\u0e14\u0e21\u0e32\u0e01"
+            ],
+            [
+                  10,
+                  "\ud83d\udd34 \u0e1b\u0e27\u0e14\u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14"
+            ]
+      ],
+      "functionRanges": [
+            [
+                  19,
+                  "\ud83d\udd34\ud83d\udd34 \u0e15\u0e48\u0e33\u0e21\u0e32\u0e01"
+            ],
+            [
+                  39,
+                  "\ud83d\udd34 \u0e15\u0e48\u0e33"
+            ],
+            [
+                  59,
+                  "\ud83d\udfe0 \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07"
+            ],
+            [
+                  79,
+                  "\ud83d\udfe1 \u0e14\u0e35"
+            ],
+            [
+                  100,
+                  "\ud83d\udfe2 \u0e14\u0e35\u0e21\u0e32\u0e01"
+            ]
+      ],
+      "satisfactionRanges": [
+            [
+                  59,
+                  "\ud83d\udd34 \u0e19\u0e49\u0e2d\u0e22\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14"
+            ],
+            [
+                  69,
+                  "\ud83d\udfe0 \u0e19\u0e49\u0e2d\u0e22"
+            ],
+            [
+                  79,
+                  "\ud83d\udfe1 \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07"
+            ],
+            [
+                  89,
+                  "\ud83d\udfe2 \u0e21\u0e32\u0e01"
+            ],
+            [
+                  100,
+                  "\ud83d\udfe2 \u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14"
+            ]
+      ],
+      "careActions": [
+            "\u0e43\u0e2b\u0e49\u0e04\u0e27\u0e32\u0e21\u0e23\u0e39\u0e49\u0e41\u0e25\u0e30\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e15\u0e32\u0e21\u0e23\u0e2d\u0e1a",
+            "\u0e1b\u0e23\u0e31\u0e1a\u0e1e\u0e24\u0e15\u0e34\u0e01\u0e23\u0e23\u0e21\u0e41\u0e25\u0e30\u0e1d\u0e36\u0e01\u0e22\u0e37\u0e14\u0e40\u0e2b\u0e22\u0e35\u0e22\u0e14",
+            "\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21\u0e42\u0e1b\u0e23\u0e41\u0e01\u0e23\u0e21 SMART POSTURE THAI",
+            "\u0e23\u0e31\u0e1a\u0e01\u0e32\u0e23\u0e14\u0e39\u0e41\u0e25\u0e42\u0e14\u0e22\u0e41\u0e1e\u0e17\u0e22\u0e4c\u0e41\u0e1c\u0e19\u0e44\u0e17\u0e22 \u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e1b\u0e23\u0e31\u0e1a\u0e01\u0e32\u0e23\u0e22\u0e28\u0e32\u0e2a\u0e15\u0e23\u0e4c",
+            "\u0e1e\u0e34\u0e08\u0e32\u0e23\u0e13\u0e32\u0e2a\u0e48\u0e07\u0e15\u0e48\u0e2d\u0e41\u0e25\u0e30\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e43\u0e01\u0e25\u0e49\u0e0a\u0e34\u0e14"
+      ],
+      "savedDemo": "Demo data saved",
+      "needEndpoint": "No Apps Script URL provided, so data was saved to the demo dashboard",
+      "sentSheet": "Data sent to Google Sheet and saved to the demo dashboard",
+      "sheetError": "Google Sheet submission failed. Please check the Apps Script URL",
+      "seeded": "Sample data filled",
+      "calculated": "Scores calculated",
+      "cleared": "Demo data cleared",
+      "noData": "No demo records yet. Save a demo record after completing the assessment.",
+      "summaryAuto": "Automatic score summary",
+      "positiveItem": "\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e2b\u0e15\u0e38: \u0e02\u0e49\u0e2d 21\u201325 \u0e40\u0e1b\u0e47\u0e19\u0e02\u0e49\u0e2d\u0e40\u0e0a\u0e34\u0e07\u0e1a\u0e27\u0e01 \u0e43\u0e2b\u0e49\u0e04\u0e34\u0e14\u0e04\u0e30\u0e41\u0e19\u0e19\u0e01\u0e25\u0e31\u0e1a (4=0, 3=1, 2=2, 1=3, 0=4)",
+      "unknownName": "Unnamed participant",
+      "pass": "Pass",
+      "fail": "Fail",
+      "riskLow": "\ud83d\udfe2 \u0e15\u0e48\u0e33",
+      "riskSlight": "\ud83d\udfe1 \u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22",
+      "riskMedium": "\ud83d\udfe0 \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07",
+      "riskHigh": "\ud83d\udd34 \u0e2a\u0e39\u0e07",
+      "riskVeryHigh": "\ud83d\udd34\ud83d\udd34 \u0e2a\u0e39\u0e07\u0e21\u0e32\u0e01",
+      "scaleLegends": {
+            "SPT-02": "0 = \u0e44\u0e21\u0e48\u0e40\u0e04\u0e22 | 1 = \u0e19\u0e32\u0e19 \u0e46 \u0e04\u0e23\u0e31\u0e49\u0e07 | 2 = \u0e1a\u0e32\u0e07\u0e04\u0e23\u0e31\u0e49\u0e07 | 3 = \u0e1a\u0e48\u0e2d\u0e22\u0e04\u0e23\u0e31\u0e49\u0e07 | 4 = \u0e40\u0e1b\u0e47\u0e19\u0e1b\u0e23\u0e30\u0e08\u0e33",
+            "SPT-03": "0 = \u0e44\u0e21\u0e48\u0e21\u0e35\u0e2d\u0e32\u0e01\u0e32\u0e23 (\u0e44\u0e21\u0e48\u0e40\u0e04\u0e22\u0e21\u0e35\u0e2d\u0e32\u0e01\u0e32\u0e23) | 1 = \u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22 (\u0e21\u0e35\u0e2d\u0e32\u0e01\u0e32\u0e23\u0e41\u0e15\u0e48\u0e44\u0e21\u0e48\u0e23\u0e1a\u0e01\u0e27\u0e19\u0e01\u0e32\u0e23\u0e17\u0e33\u0e07\u0e32\u0e19) | 2 = \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07 (\u0e23\u0e1a\u0e01\u0e27\u0e19\u0e01\u0e32\u0e23\u0e17\u0e33\u0e07\u0e32\u0e19\u0e40\u0e1b\u0e47\u0e19\u0e1a\u0e32\u0e07\u0e04\u0e23\u0e31\u0e49\u0e07) | 3 = \u0e21\u0e32\u0e01 (\u0e23\u0e1a\u0e01\u0e27\u0e19\u0e01\u0e32\u0e23\u0e17\u0e33\u0e07\u0e32\u0e19\u0e1a\u0e48\u0e2d\u0e22\u0e04\u0e23\u0e31\u0e49\u0e07) | 4 = \u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14 (\u0e23\u0e1a\u0e01\u0e27\u0e19\u0e01\u0e32\u0e23\u0e17\u0e33\u0e07\u0e32\u0e19\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e21\u0e32\u0e01\u0e2b\u0e23\u0e37\u0e2d\u0e2b\u0e22\u0e38\u0e14\u0e07\u0e32\u0e19)",
+            "SPT-04": "0 = \u0e40\u0e2b\u0e21\u0e32\u0e30\u0e2a\u0e21 | 1 = \u0e04\u0e27\u0e23\u0e1b\u0e23\u0e31\u0e1a\u0e1b\u0e23\u0e38\u0e07\u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22 | 2 = \u0e04\u0e27\u0e23\u0e1b\u0e23\u0e31\u0e1a\u0e1b\u0e23\u0e38\u0e07 | 3 = \u0e04\u0e27\u0e23\u0e41\u0e01\u0e49\u0e44\u0e02\u0e42\u0e14\u0e22\u0e40\u0e23\u0e47\u0e27 | 4 = \u0e21\u0e35\u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e2a\u0e39\u0e07\u0e21\u0e32\u0e01",
+            "SPT-05": "0 = \u0e44\u0e21\u0e48\u0e1b\u0e27\u0e14 | 1\u20133 = \u0e1b\u0e27\u0e14\u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22 | 4\u20136 = \u0e1b\u0e27\u0e14\u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07 | 7\u20139 = \u0e1b\u0e27\u0e14\u0e21\u0e32\u0e01 | 10 = \u0e1b\u0e27\u0e14\u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14",
+            "SPT-06": "0 = \u0e17\u0e33\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e40\u0e25\u0e22 | 1\u20132 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e40\u0e25\u0e47\u0e01\u0e19\u0e49\u0e2d\u0e22 | 3\u20134 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e41\u0e15\u0e48\u0e25\u0e33\u0e1a\u0e32\u0e01\u0e21\u0e32\u0e01 | 5\u20136 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07 | 7\u20138 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e04\u0e48\u0e2d\u0e19\u0e02\u0e49\u0e32\u0e07\u0e14\u0e35 | 9 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e40\u0e01\u0e37\u0e2d\u0e1a\u0e1b\u0e01\u0e15\u0e34 | 10 = \u0e17\u0e33\u0e44\u0e14\u0e49\u0e1b\u0e01\u0e15\u0e34 \u0e44\u0e21\u0e48\u0e21\u0e35\u0e02\u0e49\u0e2d\u0e08\u0e33\u0e01\u0e31\u0e14",
+            "SPT-07": "5 = \u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14 (\u0e1e\u0e36\u0e07\u0e1e\u0e2d\u0e43\u0e08\u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14) | 4 = \u0e21\u0e32\u0e01 (\u0e1e\u0e36\u0e07\u0e1e\u0e2d\u0e43\u0e08\u0e21\u0e32\u0e01) | 3 = \u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07 (\u0e1e\u0e36\u0e07\u0e1e\u0e2d\u0e43\u0e08\u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07) | 2 = \u0e19\u0e49\u0e2d\u0e22 (\u0e1e\u0e36\u0e07\u0e1e\u0e2d\u0e43\u0e08\u0e19\u0e49\u0e2d\u0e22) | 1 = \u0e19\u0e49\u0e2d\u0e22\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14 (\u0e1e\u0e36\u0e07\u0e1e\u0e2d\u0e43\u0e08\u0e19\u0e49\u0e2d\u0e22\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14)"
+      },
+      "supplementFieldNote": "Supplementary information; not included in the main score",
+      "bmiPrompt": "BMI auto calculation",
+      "bmiUnder": "\u0e15\u0e48\u0e33\u0e01\u0e27\u0e48\u0e32\u0e40\u0e01\u0e13\u0e11\u0e4c (<18.5)",
+      "bmiNormal": "\u0e1b\u0e01\u0e15\u0e34 (18.5\u201322.9)",
+      "bmiOver": "\u0e19\u0e49\u0e33\u0e2b\u0e19\u0e31\u0e01\u0e40\u0e01\u0e34\u0e19 (23.0\u201324.9)",
+      "bmiObese1": "\u0e2d\u0e49\u0e27\u0e19\u0e23\u0e30\u0e14\u0e31\u0e1a 1 (25.0\u201329.9)",
+      "bmiObese2": "\u0e2d\u0e49\u0e27\u0e19\u0e23\u0e30\u0e14\u0e31\u0e1a 2 (\u226530)",
+      "progressStart": "Not started",
+      "progressDone": "\u0e04\u0e23\u0e1a\u0e16\u0e49\u0e27\u0e19",
+      "printTitle": "SMART POSTURE THAI - Individual Result",
+      "appsScriptDownloaded": "Apps Script downloaded",
+      "jpgDownloaded": "JPG downloaded",
+      "progressLabel": "\u0e04\u0e27\u0e32\u0e21\u0e04\u0e37\u0e1a\u0e2b\u0e19\u0e49\u0e32"
+};
+    const tabs = assessmentForms;
+    const scores = {};
+    const touchedScores = new Set();
+    const formValues = {};
+    let activeTab = tabs[0].id;
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function allQuestions(form) { return form.sections.flatMap((section) => section.questions || []); }
+
+    function initScores() {
+      tabs.forEach((tab) => {
+        allQuestions(tab).forEach((question) => { scores[question.key] = question.default ?? question.min ?? 0; });
+        tab.sections.forEach((section) => {
+          (section.fields || []).forEach((field) => { formValues[field.key] = field.default || ""; });
+        });
+      });
+    }
+
+    function renderTabs() {
+      const tabBox = $("#tabs");
+      tabBox.innerHTML = "";
+      tabs.forEach((tab) => {
+        const button = document.createElement("button");
+        button.className = "tab" + (tab.id === activeTab ? " active" : "");
+        button.type = "button";
+        button.textContent = tab.title;
+        button.addEventListener("click", () => { activeTab = tab.id; renderTabs(); renderQuestions(); updateCompletion(); });
+        tabBox.appendChild(button);
+      });
+    }
+
+    function adjustedScore(question) {
+      const raw = Number(scores[question.key] || 0);
+      return question.reverse ? Number(question.max) - raw : raw;
+    }
+
+    function scoreForm(id) {
+      const form = tabs.find((tab) => tab.id === id);
+      if (!form || !form.maxScore) return { raw: 0, max: 0, percent: 0 };
+      let questions = allQuestions(form);
+      if (id === "SPT-06") questions = questions.filter((question) => question.key.startsWith("spt06_act_"));
+      const raw = questions.reduce((sum, question) => sum + adjustedScore(question), 0);
+      return { raw, max: form.maxScore, percent: Math.round((raw / form.maxScore) * 100) };
+    }
+
+    function rangedText(value, ranges) {
+      const found = ranges.find(([max]) => value <= max) || ranges[ranges.length - 1];
+      return found[1];
+    }
+
+    function interpretation(id, score) {
+      if (id === "SPT-02") return rangedText(score.raw, textMap.riskRanges);
+      if (id === "SPT-03") return rangedText(score.raw, textMap.symptomRanges);
+      if (id === "SPT-04") return rangedText(score.raw, textMap.ergoRanges);
+      if (id === "SPT-05") return rangedText(score.raw, textMap.painRanges);
+      if (id === "SPT-06") return rangedText(score.percent, textMap.functionRanges);
+      if (id === "SPT-07") return rangedText(score.percent, textMap.satisfactionRanges);
+      return textMap.noScore;
+    }
+
+    function renderField(field) {
+      const value = formValues[field.key] || "";
+      if (field.type === "recommendationList") {
+        const analysis = spt08Recommendations(field);
+        const source = analysis.source ? `<small class="analysis-source">${analysis.source}</small>` : "";
+        return `<div class="assessment-field wide"><span>${field.label}</span>${source}<ul class="recommendation-list ${analysis.auto ? "analysis-list" : ""}">${analysis.options.map((option) => `<li>${option}</li>`).join("")}</ul></div>`;
+      }
+      if (field.type === "date") {
+        return `<label class="assessment-field">${field.label}<div class="date-field"><input data-field="${field.key}" type="text" inputmode="numeric" value="${value}" placeholder="วว/ดด/ปป" pattern="\\d{2}/\\d{2}/\\d{2}"><input class="date-native" data-date-picker="${field.key}" type="date" aria-label="เลือกวันที่ ${field.label}"></div><span class="inline-note">รูปแบบวันที่ วว/ดด/ปป เช่น 05/07/69 หรือกดปฏิทินเพื่อเลือกวันที่</span></label>`;
+      }
+      if (field.type === "checkboxGroup" || field.type === "checkboxGroupOther") {
+        const selected = Array.isArray(value) ? value : String(value || "").split("|").filter(Boolean);
+        const otherOption = field.otherOption || "อื่น ๆ ระบุ";
+        const otherValue = formValues[field.otherKey] || "";
+        const otherHtml = field.type === "checkboxGroupOther" ? `<label class="other-field ${selected.includes(otherOption) ? "show" : ""}" data-other-wrap="${field.key}">${field.otherLabel || otherOption}<input data-field-other="${field.otherKey}" data-other-source="${field.key}" value="${otherValue}" placeholder="${field.otherLabel || otherOption}"></label>` : "";
+        return `<div class="assessment-field wide"><span>${field.label}</span><div class="choice-grid">${field.options.map((option) => `<label><input type="checkbox" data-field-check="${field.key}" value="${option}" ${selected.includes(option) ? "checked" : ""}> ${option}</label>`).join("")}${otherHtml}</div></div>`;
+      }
+      if (field.type === "radioDetail") {
+        const choice = formValues[field.key + "_choice"] || field.options[0] || "";
+        const detail = formValues[field.key + "_detail"] || "";
+        return `<div class="assessment-field wide"><span>${field.label}</span><div class="choice-grid">${field.options.map((option) => `<label><input type="radio" name="${field.key}" data-field-choice="${field.key}" value="${option}" ${choice === option ? "checked" : ""}> ${option}</label>`).join("")}<textarea data-field-detail="${field.key}" placeholder="${field.detailPlaceholder || ""}">${detail}</textarea></div></div>`;
+      }
+      if (field.type === "computed") {
+        return `<label class="assessment-field">${field.label}<input data-field="${field.key}" readonly value="${value}" placeholder="${field.placeholder || ""}"><span class="inline-note" data-bmi-note>${formValues.spt01_bmi_level || textMap.bmiPrompt}</span></label>`;
+      }
+      if (field.type === "select") {
+        return `<label class="assessment-field">${field.label}<select data-field="${field.key}">${field.options.map((option) => `<option ${option === value ? "selected" : ""}>${option}</option>`).join("")}</select></label>`;
+      }
+      if (field.type === "textarea") {
+        return `<label class="assessment-field wide">${field.label}<textarea data-field="${field.key}" placeholder="${field.placeholder || ""}">${value}</textarea></label>`;
+      }
+      return `<label class="assessment-field">${field.label}<input data-field="${field.key}" type="${field.type || "text"}" value="${value}" placeholder="${field.placeholder || ""}"></label>`;
+    }
+
+    function bindFieldInputs(scope) {
+      scope.querySelectorAll("[data-field]").forEach((input) => {
+        const key = input.dataset.field;
+        input.addEventListener("input", () => {
+          formValues[key] = input.value;
+          syncRegistrationFromAssessment(key, input.value);
+          updateCompletion();
+        });
+        input.addEventListener("change", () => {
+          formValues[key] = input.value;
+          syncRegistrationFromAssessment(key, input.value);
+          updateCompletion();
+        });
+      });
+      scope.querySelectorAll("[data-date-picker]").forEach((picker) => {
+        const key = picker.dataset.datePicker;
+        const input = scope.querySelector(`[data-field="${key}"]`);
+        const syncPicker = () => {
+          if (!picker.value) return;
+          const [yyyy, mm, dd] = picker.value.split("-");
+          const buddhistYear = String(Number(yyyy) + 543).slice(-2);
+          const formatted = `${dd}/${mm}/${buddhistYear}`;
+          if (input) input.value = formatted;
+          formValues[key] = formatted;
+          updateCompletion();
+        };
+        picker.addEventListener("input", syncPicker);
+        picker.addEventListener("change", syncPicker);
+      });
+      scope.querySelectorAll("[data-field-check]").forEach((input) => {
+        const key = input.dataset.fieldCheck;
+        const update = () => {
+          formValues[key] = [...scope.querySelectorAll(`[data-field-check="${key}"]:checked`)].map((item) => item.value);
+          scope.querySelectorAll(`[data-other-wrap="${key}"]`).forEach((wrap) => wrap.classList.toggle("show", formValues[key].includes(wrap.dataset.otherWrap)));
+          updateCompletion();
+        };
+        input.addEventListener("change", update);
+      });
+      scope.querySelectorAll("[data-field-other]").forEach((input) => {
+        input.addEventListener("input", () => { formValues[input.dataset.fieldOther] = input.value; updateCompletion(); });
+      });
+      scope.querySelectorAll("[data-field-choice]").forEach((input) => {
+        input.addEventListener("change", () => { formValues[input.dataset.fieldChoice + "_choice"] = input.value; updateCompletion(); });
+      });
+      scope.querySelectorAll("[data-field-detail]").forEach((input) => {
+        input.addEventListener("input", () => { formValues[input.dataset.fieldDetail + "_detail"] = input.value; updateCompletion(); });
+      });
+    }
+
+    function scoreSummaryHtml(current) {
+      const score = scoreForm(current.id);
+      if (!current.maxScore) return `<div class="score-summary"><strong>${current.title || current.id}</strong><span>${current.description}</span></div>`;
+      const pct = current.id === "SPT-06" || current.id === "SPT-07" ? ` (${score.percent}%)` : "";
+      return `<div class="score-summary"><strong>${current.title || current.id}: ${score.raw}/${score.max}</strong><span>${interpretation(current.id, score)}${pct}</span></div>`;
+    }
+
+    function spt08Rows() {
+      const ids = ["SPT-02", "SPT-03", "SPT-04", "SPT-05", "SPT-06", "SPT-07"];
+      return ids.map((id) => {
+        const form = tabs.find((tab) => tab.id === id);
+        const score = scoreForm(id);
+        return { tool: form.title, score: `${score.raw}/${score.max}`, interpretation: interpretation(id, score) };
+      });
+    }
+
+    function overallRiskOptions(result) {
+      return [
+        { min: 0, max: 20, text: "🟢 ระดับที่ 1 : ความเสี่ยงต่ำ" },
+        { min: 21, max: 40, text: "🟡 ระดับที่ 2 : ความเสี่ยงเล็กน้อย" },
+        { min: 41, max: 60, text: "🟠 ระดับที่ 3 : ความเสี่ยงปานกลาง" },
+        { min: 61, max: 80, text: "🔴 ระดับที่ 4 : ความเสี่ยงสูง" },
+        { min: 81, max: 100, text: "🔴🔴 ระดับที่ 5 : ความเสี่ยงสูงมาก" }
+      ].map((item) => ({ ...item, active: result.risk >= item.min && result.risk <= item.max }));
+    }
+
+    function spt08AutoSummaryHtml() {
+      const result = calculate();
+      const rows = spt08Rows().map((row) => `<tr><td>${row.tool}</td><td>${row.score}</td><td>${row.interpretation}</td></tr>`).join("");
+      const overall = overallRiskOptions(result).map((item) => `<div class="overall-item ${item.active ? "active" : ""}"><span>${item.active ? "☑" : "☐"}</span><span>${item.text}</span></div>`).join("");
+      return `<section class="assessment-section detail-summary" id="spt08AutoSummary"><h3>สรุปผลการประเมิน</h3><table class="spt08-table"><thead><tr><th>เครื่องมือ</th><th>คะแนน</th><th>ผลการแปลผล</th></tr></thead><tbody>${rows}</tbody></table><h3>ระดับความเสี่ยงโดยรวม (Overall Risk Classification)</h3><p class="muted">ระบบคำนวณระดับความเสี่ยงจากข้อมูล SPT-01 ถึง SPT-06 โดยไม่รวมคะแนนความพึงพอใจ SPT-07 คะแนนรวมความเสี่ยง ${result.risk}/100</p><div class="overall-list">${overall}</div><h3>คำแนะนำ</h3><p>${adviceFor(result)}</p></section>`;
+    }
+
+    function getScoreValue(key) {
+      return Number(scores[key] ?? 0);
+    }
+
+    function anyScoreAtLeast(keys, threshold = 2) {
+      return keys.some((key) => getScoreValue(key) >= threshold);
+    }
+
+    function addUnique(list, item) {
+      if (!list.includes(item)) list.push(item);
+    }
+
+    function spt08Analysis() {
+      const result = calculate();
+      const problems = [];
+      const behavior = [];
+      const program = [];
+      const followup = [];
+
+      if (anyScoreAtLeast(["spt02_q16", "spt03_body_1"])) addUnique(problems, "ปวดคอ");
+      if (anyScoreAtLeast(["spt02_q3", "spt02_q17", "spt03_body_2"])) addUnique(problems, "ปวดบ่า");
+      if (anyScoreAtLeast(["spt02_q17", "spt03_body_3", "spt03_body_4"])) addUnique(problems, "ปวดไหล่");
+      if (anyScoreAtLeast(["spt02_q18", "spt03_body_5"])) addUnique(problems, "ปวดหลังส่วนบน");
+      if (anyScoreAtLeast(["spt02_q18", "spt03_body_6"])) addUnique(problems, "ปวดหลังส่วนล่าง");
+      if (result.pain >= 4 || result.msdRaw >= 21) addUnique(problems, "กล้ามเนื้อตึง");
+      if (anyScoreAtLeast(["spt02_q19"])) addUnique(problems, "ชาหรือปวดร้าว");
+      if (anyScoreAtLeast(["spt02_q1", "spt02_q2", "spt02_q3", "spt02_q4", "spt02_q5"])) addUnique(problems, "ท่าทางการทำงานไม่เหมาะสม");
+      if (result.ergo >= 41 || anyScoreAtLeast(["spt02_q6", "spt02_q7", "spt02_q8", "spt02_q9", "spt02_q10"])) addUnique(problems, "สถานที่ทำงานไม่เหมาะสม");
+      if (getScoreValue("spt02_q12") >= 2 || getScoreValue("spt02_q24") <= 1) addUnique(problems, "ขาดการออกกำลังกาย");
+      if (getScoreValue("spt02_q11") >= 2 || getScoreValue("spt02_q21") <= 1) addUnique(problems, "ไม่ยืดเหยียดระหว่างทำงาน");
+      if (getScoreValue("spt02_q15") >= 2) addUnique(problems, "ความเครียดจากการทำงาน");
+
+      if (result.risk >= 41 || problems.includes("ท่าทางการทำงานไม่เหมาะสม")) addUnique(behavior, "ปรับท่านั่งทำงาน");
+      if (getScoreValue("spt02_q6") >= 2 || result.ergo >= 41) addUnique(behavior, "ปรับระดับจอคอมพิวเตอร์");
+      if (getScoreValue("spt02_q7") >= 2 || result.ergo >= 41) addUnique(behavior, "ปรับเก้าอี้");
+      if (getScoreValue("spt02_q9") >= 2 || result.ergo >= 41) addUnique(behavior, "ปรับตำแหน่งเมาส์และคีย์บอร์ด");
+      if (getScoreValue("spt02_q1") >= 2 || getScoreValue("spt02_q11") >= 2 || result.risk >= 41) addUnique(behavior, "ลุกเปลี่ยนอิริยาบถทุก 30–60 นาที");
+      if (getScoreValue("spt02_q14") >= 2 || result.risk >= 41) addUnique(behavior, "ดื่มน้ำให้เพียงพอ");
+      if (getScoreValue("spt02_q12") >= 2 || getScoreValue("spt02_q24") <= 1 || result.risk >= 41) addUnique(behavior, "เพิ่มกิจกรรมทางกาย");
+
+      if (result.risk >= 41 || result.pain >= 4 || result.msdRaw >= 21) {
+        addUnique(program, "ฝึกยืดเหยียดกล้ามเนื้อ");
+        addUnique(program, "ฝึกฤๅษีดัดตน");
+        addUnique(program, "สอนการนวดตนเอง");
+        addUnique(program, "ให้เอกสารความรู้");
+        addUnique(program, "รับชมวิดีโอการฝึกผ่าน QR Code");
+      }
+      if (result.risk >= 61 || result.pain >= 7 || result.msdRaw >= 41) {
+        addUnique(program, "นวดไทย");
+        addUnique(program, "นวดกดจุด");
+        addUnique(program, "ประคบสมุนไพร");
+      }
+
+      if (result.risk >= 81 || result.pain >= 8) {
+        followup.push("ติดตามหลัง 2 สัปดาห์", "ติดตามหลัง 1 เดือน", "ติดตามหลัง 3 เดือน");
+      } else if (result.risk >= 61 || result.pain >= 7) {
+        followup.push("ติดตามหลัง 2 สัปดาห์", "ติดตามหลัง 1 เดือน");
+      } else if (result.risk >= 41 || result.pain >= 4 || result.msdRaw >= 21 || result.ergo >= 41) {
+        followup.push("ติดตามหลัง 2 สัปดาห์");
+      }
+      addUnique(followup, "ติดตามหลัง 3 เดือน");
+      addUnique(followup, "ประเมินซ้ำทุก 6 เดือน");
+
+      return { result, problems, behavior, program, followup };
+    }
+
+    function spt08Recommendations(field) {
+      const analysis = spt08Analysis();
+      const moderateOrHigher = analysis.result.risk >= 41 || analysis.result.pain >= 4 || analysis.result.msdRaw >= 21 || analysis.result.ergo >= 41 || analysis.problems.length > 0;
+      const noProblem = "ยังไม่พบปัญหาระดับปานกลางขึ้นไปจากข้อมูลที่ประเมิน ควรคงพฤติกรรมป้องกันและประเมินซ้ำตามรอบ";
+      if (field.key === "spt08_key_problems") {
+        return { auto: true, source: "ระบบวิเคราะห์จากคะแนน SPT-02 ถึง SPT-06 เฉพาะประเด็นที่พบตั้งแต่ระดับปานกลางขึ้นไป", options: moderateOrHigher && analysis.problems.length ? analysis.problems : [noProblem] };
+      }
+      if (field.key === "spt08_behavior_plan") {
+        return { auto: true, source: "รายการนี้ปรับตามพฤติกรรมเสี่ยงและปัจจัยการยศาสตร์ที่พบ", options: analysis.behavior.length ? analysis.behavior : ["คงพฤติกรรมการทำงานที่เหมาะสม และลุกเปลี่ยนอิริยาบถเป็นระยะ"] };
+      }
+      if (field.key === "spt08_program_plan") {
+        return { auto: true, source: "รายการนี้แนะนำเมื่อผลประเมินอยู่ในระดับปานกลางขึ้นไป หรือมีอาการปวดที่ควรดูแล", options: analysis.program.length ? analysis.program : ["ให้เอกสารความรู้", "รับชมวิดีโอการฝึกผ่าน QR Code"] };
+      }
+      if (field.key === "spt08_followup_plan") {
+        return { auto: true, source: "ระบบกำหนดระยะติดตามตามระดับความเสี่ยงโดยรวมและระดับอาการปวด", options: analysis.followup };
+      }
+      return { auto: false, source: "", options: field.options || [] };
+    }
+
+    function spt08FinalActionsHtml() {
+      return `<section class="assessment-section detail-summary final-actions" id="spt08FinalActions"><h3>ส่งผลการประเมิน</h3><p class="muted">เมื่ออ่านแผนการดูแลรายบุคคลและเลื่อนมาถึงท้ายสุดแล้ว ให้กดส่งคำตอบทั้งหมดให้ผู้ประเมินก่อน หลังจากส่งสำเร็จระบบจะแสดงปุ่มบันทึกภาพผลสรุปไว้ในเครื่อง</p><div class="spt08-actions"><button class="btn primary" type="button" id="submitFinalBtn" hidden>ส่งคำตอบให้ผู้ประเมิน</button><button class="btn" type="button" id="spt08JpgBtn" hidden>บันทึกภาพ</button></div><p class="muted final-submit-note" id="finalSubmitNote">ปุ่มส่งคำตอบจะแสดงเมื่อเลื่อนทำแบบประเมินครบถึง 100%</p></section>`;
+    }
+
+    function renderQuestions() {
+      const current = tabs.find((tab) => tab.id === activeTab);
+      const list = $("#questionList");
+      list.innerHTML = scoreSummaryHtml(current);
+      if (current.id === "SPT-08") {
+        list.insertAdjacentHTML("beforeend", spt08AutoSummaryHtml());
+      }
+      current.sections.forEach((section) => {
+        const sectionEl = document.createElement("section");
+        sectionEl.className = "assessment-section";
+        sectionEl.innerHTML = `<h3>${section.title}</h3>`;
+        if (section.fields) {
+          const fieldGrid = document.createElement("div");
+          fieldGrid.className = "assessment-fields";
+          fieldGrid.innerHTML = section.fields.map(renderField).join("");
+          bindFieldInputs(fieldGrid);
+          sectionEl.appendChild(fieldGrid);
+        }
+        (section.questions || []).forEach((question) => {
+          const row = document.createElement("article");
+          row.className = "question";
+          const value = Number(scores[question.key] ?? question.default ?? 0);
+          const legend = current.id === "SPT-06" && Number(question.max) === 4
+            ? "0 = ไม่มีผลกระทบ | 1 = มีผลกระทบน้อย | 2 = มีผลกระทบปานกลาง | 3 = มีผลกระทบมาก | 4 = มีผลกระทบมากที่สุด"
+            : textMap.scaleLegends[current.id] || `${question.min}-${question.max} ${textMap.scoreWord}`;
+          row.innerHTML = `
+            <div>
+              <strong>${question.text}</strong>
+              <small>${question.reverse ? textMap.positiveItem : `${question.min}-${question.max} ${textMap.scoreWord}`}</small>
+              <span class="scale-legend">${legend}</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="${question.min}" max="${question.max}" value="${value}" data-key="${question.key}" aria-label="${question.text}">
+              <span class="range-value">${value}</span>
+            </div>`;
+          row.querySelector("input").addEventListener("input", (event) => {
+            scores[question.key] = Number(event.target.value);
+            touchedScores.add(question.key);
+            row.querySelector(".range-value").textContent = event.target.value;
+            updateResult();
+            updateCompletion();
+            const activeSummary = list.querySelector(".score-summary");
+            if (activeSummary) activeSummary.outerHTML = scoreSummaryHtml(current);
+            if (current.id === "SPT-08") renderQuestions();
+          });
+          sectionEl.appendChild(row);
+        });
+        list.appendChild(sectionEl);
+      });
+      if (current.id === "SPT-08") {
+        list.insertAdjacentHTML("beforeend", spt08FinalActionsHtml());
+        $("#submitFinalBtn")?.addEventListener("click", submitFinalAssessment);
+        $("#spt08JpgBtn")?.addEventListener("click", downloadResultJpg);
+        updateCompletion();
+      }
+    }
+
+    function calculate() {
+      const spt02 = scoreForm("SPT-02"), spt03 = scoreForm("SPT-03"), spt04 = scoreForm("SPT-04"), spt05 = scoreForm("SPT-05"), spt06 = scoreForm("SPT-06"), spt07 = scoreForm("SPT-07");
+      const pain = Number(scores.painScore || 0);
+      const functionalRisk = 100 - spt06.percent;
+      const risk = Math.round((spt02.raw * .35) + (spt03.percent * .2) + (spt04.percent * .2) + (pain * 10 * .15) + (functionalRisk * .1));
+      return { office: spt02.raw, msdRaw: spt03.raw, msd: spt03.percent, ergoRaw: spt04.raw, ergo: spt04.percent, pain, activityRaw: spt06.raw, activity: spt06.percent, satisfactionRaw: spt07.raw, satisfaction: spt07.percent, risk: Math.max(0, Math.min(100, risk)) };
+    }
+
+    function levelFor(score) {
+      if (score >= 81) return { text: textMap.riskVeryHigh, className: "" };
+      if (score >= 61) return { text: textMap.riskHigh, className: "" };
+      if (score >= 41) return { text: textMap.riskMedium, className: "medium" };
+      if (score >= 21) return { text: textMap.riskSlight, className: "medium" };
+      return { text: textMap.riskLow, className: "low" };
+    }
+
+    function adviceFor(result) {
+      if (result.risk >= 81 || result.pain === 10) return textMap.careActions[4];
+      if (result.risk >= 61 || result.pain >= 7) return textMap.careActions[3];
+      if (result.risk >= 41 || result.pain >= 4) return textMap.careActions[2];
+      if (result.risk >= 21) return textMap.careActions[1];
+      return textMap.careActions[0];
+    }
+
+    function updateResult() {
+      const result = calculate();
+      const level = levelFor(result.risk);
+      $("#riskScore").textContent = result.risk;
+      $("#riskRing").style.setProperty("--score", result.risk);
+      $("#riskLevel").textContent = level.text;
+      $("#riskLevel").className = "level " + level.className;
+      $("#adviceText").textContent = adviceFor(result);
+      $("#painScore").textContent = `${result.pain}/10`;
+      $("#officeScore").textContent = result.office;
+      $("#ergoScore").textContent = result.ergo;
+      $("#activityScore").textContent = result.activity;
+      $("#satisScore").textContent = result.satisfaction;
+      $("#painBar").style.setProperty("--w", `${result.pain * 10}%`);
+      $("#officeBar").style.setProperty("--w", `${result.office}%`);
+      $("#ergoBar").style.setProperty("--w", `${result.ergo}%`);
+      $("#activityBar").style.setProperty("--w", `${result.activity}%`);
+      $("#satisBar").style.setProperty("--w", `${result.satisfaction}%`);
+      return { ...result, level: level.text, advice: adviceFor(result) };
+    }
+
+    function normalizePhase(value) {
+      const text = String(value || "");
+      if (text.includes("2")) return "PostTest";
+      if (/follow|ติดตาม/i.test(text)) return "FollowUp";
+      return "PreTest";
+    }
+
+    function profile() {
+      return { participantId: $("#participantId").value.trim() || `SPT-${String(Date.now()).slice(-3)}`, fullName: $("#fullName").value.trim() || textMap.unknownName, age: $("#age").value || formValues.spt01_age || "", gender: $("#gender").value || formValues.spt01_gender || "", position: (($("#position")?.value === "อื่นๆ" ? $("#positionOther")?.value : $("#position")?.value) || formValues.spt01_position || ""), tenure: $("#tenure")?.value || formValues.spt01_tenure || "", workHours: formValues.spt01_work_hours || "", computerHours: formValues.spt01_computer_hours || "", weight: $("#weight")?.value || formValues.spt01_weight || "", height: $("#height")?.value || formValues.spt01_height || "", bmi: formValues.spt01_bmi || "", bmiLevel: formValues.spt01_bmi_level || "", phase: normalizePhase(formValues.spt01_assessment_round), assessmentRound: formValues.spt01_assessment_round || "", timestamp: new Date().toISOString() };
+    }
+
+    function buildRecord() { const result = updateResult(); return { ...profile(), ...result, scores: { ...scores }, formValues: { ...formValues }, kpi: result.risk < 61 && result.pain <= 6 ? textMap.pass : textMap.fail }; }
+    function records() { try { return JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch { return []; } }
+    function saveRecord(record) { localStorage.setItem(storageKey, JSON.stringify([record, ...records()].slice(0, 100))); renderDashboard(); }
+    function avg(list, key) { return list.length ? Math.round(list.reduce((sum, item) => sum + Number(item[key] || 0), 0) / list.length) : 0; }
+
+    function renderDashboard() {
+      const data = records();
+      const pre = data.filter((item) => item.phase === "PreTest"), post = data.filter((item) => item.phase === "PostTest");
+      const low = data.filter((item) => item.risk < 41).length, mid = data.filter((item) => item.risk >= 41 && item.risk < 61).length, high = data.filter((item) => item.risk >= 61).length;
+      const passed = data.filter((item) => item.kpi === textMap.pass).length, total = Math.max(data.length, 1);
+      $("#mTotal").textContent = data.length; $("#mPre").textContent = avg(pre, "risk"); $("#mPost").textContent = avg(post, "risk"); $("#mPain").textContent = avg(data, "pain"); $("#mSatis").textContent = avg(data, "satisfaction"); $("#mKpi").textContent = `${Math.round((passed / total) * 100)}%`;
+      setRiskBar("lowRisk", low, total); setRiskBar("midRisk", mid, total); setRiskBar("highRisk", high, total);
+      const rows = $("#recordRows"); rows.innerHTML = "";
+      data.slice(0, 8).forEach((item) => { const tr = document.createElement("tr"); const badge = item.risk >= 61 ? "red" : item.risk >= 41 ? "warn" : ""; tr.innerHTML = `<td>${item.participantId}</td><td>${item.fullName}</td><td>${item.phase}</td><td>${item.risk}</td><td><span class="badge ${badge}">${item.level}</span></td>`; rows.appendChild(tr); });
+      if (!data.length) rows.innerHTML = `<tr><td colspan="5" class="muted">${textMap.noData}</td></tr>`;
+    }
+
+    function setRiskBar(prefix, count, total) { $(`#${prefix}Bar`).style.setProperty("--w", `${Math.round((count / total) * 100)}%`); $(`#${prefix}Text`).textContent = count; }
+    function toast(message) { const box = $("#toast"); box.textContent = message; box.classList.add("show"); clearTimeout(toast.timer); toast.timer = setTimeout(() => box.classList.remove("show"), 2600); }
+
+    function downloadCsv() {
+      const data = records();
+      const columns = ["timestamp", "participantId", "fullName", "age", "gender", "position", "phase", "risk", "level", "office", "msdRaw", "ergoRaw", "pain", "activityRaw", "satisfactionRaw", "kpi"];
+      const csv = [columns.join(","), ...data.map((item) => columns.map((key) => JSON.stringify(item[key] ?? "")).join(","))].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "smart-posture-thai-dashboard-data.csv"; a.click(); URL.revokeObjectURL(url);
+    }
+
+    function cleanSheetEndpoint(value) {
+      const endpoint = String(value || "").trim();
+      if (!endpoint) return defaultSheetEndpoint;
+      if (/127\.0\.0\.1|localhost|file:\/\//i.test(endpoint)) return defaultSheetEndpoint;
+      if (!/^https:\/\/script\.google\.com\/macros\/s\//i.test(endpoint)) return defaultSheetEndpoint;
+      return endpoint;
+    }
+
+    async function sendToSheet(record) {
+      const endpointInput = $("#sheetEndpoint");
+      const endpoint = cleanSheetEndpoint(endpointInput?.value || defaultSheetEndpoint);
+      if (endpointInput) endpointInput.value = endpoint;
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          cache: "no-store",
+          keepalive: true,
+          body: JSON.stringify(record)
+        });
+        saveRecord(record);
+        toast(textMap.sentSheet);
+      }
+      catch (error) {
+        console.error(error);
+        toast(textMap.sheetError);
+        saveRecord(record);
+      }
+    }
+
+    function seedDemo() {
+      ensureParticipantId(); $("#fullName").value = "SMART POSTURE THAI"; $("#age").value = "34"; $("#weight").value = "62"; $("#height").value = "160"; formValues.spt01_age = "34"; formValues.spt01_gender = $("#gender").value; formValues.spt01_weight = "62"; formValues.spt01_height = "160"; formValues.spt01_position = $("#position")?.value || ""; formValues.spt01_position_other = $("#positionOther")?.value || ""; formValues.spt01_tenure = $("#tenure")?.value || ""; formValues.spt01_work_hours = "6–8 ชั่วโมง"; formValues.spt01_computer_hours = "มากกว่า 6 ชั่วโมง"; formValues.spt01_assessment_round = "ครั้งที่ 1"; computeBMI();
+      Object.keys(scores).forEach((key) => { if (key.startsWith("spt07_")) scores[key] = 4; else if (key.startsWith("spt06_act_")) scores[key] = 7; else if (key === "painScore") scores[key] = 7; else scores[key] = 2; });
+      Object.keys(scores).forEach((key) => touchedScores.add(key));
+      ["spt02_q1","spt02_q2","spt02_q16","spt02_q17","spt03_body_1","spt03_body_2","spt04_3_1","spt04_5_2"].forEach((key) => scores[key] = 3);
+      ["spt02_q21","spt02_q22","spt02_q23","spt02_q24","spt02_q25"].forEach((key) => scores[key] = 1);
+      renderQuestions(); updateResult(); updateCompletion(); toast(textMap.seeded);
+    }
+
+    async function submitFinalAssessment() {
+      updateResult();
+      await sendToSheet(buildRecord());
+      document.body.classList.add("submitted-mode");
+      const button = $("#submitFinalBtn");
+      if (button) {
+        button.disabled = true;
+        button.textContent = "ส่งคำตอบสำเร็จแล้ว";
+      }
+      const jpgButton = $("#spt08JpgBtn");
+      if (jpgButton) jpgButton.hidden = false;
+    }
+
+    function setAppLink() {
+      const currentLink = location.href.split("#")[0];
+      $("#appLink").textContent = currentLink;
+      $("#qrImage").src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentLink)}`;
+    }
+
+    function ensureParticipantId() {
+      const input = $("#participantId");
+      if (!input || input.value) return;
+      const key = "spt-seq-global";
+      const next = Number(localStorage.getItem(key) || "0") + 1;
+      localStorage.setItem(key, String(next));
+      input.value = `SPT-${String(next).padStart(3, "0")}`;
+    }
+
+    function bmiLevel(value) {
+      if (!value) return textMap.bmiPrompt;
+      if (value < 18.5) return textMap.bmiUnder;
+      if (value < 23) return textMap.bmiNormal;
+      if (value < 25) return textMap.bmiOver;
+      if (value < 30) return textMap.bmiObese1;
+      return textMap.bmiObese2;
+    }
+
+    function computeBMI() {
+      formValues.spt01_weight = $("#weight")?.value || formValues.spt01_weight || "";
+      formValues.spt01_height = $("#height")?.value || formValues.spt01_height || "";
+      const weight = Number(formValues.spt01_weight || 0);
+      const heightCm = Number(formValues.spt01_height || 0);
+      const bmi = weight > 0 && heightCm > 0 ? weight / Math.pow(heightCm / 100, 2) : 0;
+      const value = bmi ? bmi.toFixed(1) : "";
+      const level = bmi ? bmiLevel(bmi) : textMap.bmiPrompt;
+      if ($("#bmi")) $("#bmi").value = value;
+      if ($("#bmiLevel")) $("#bmiLevel").textContent = level;
+      formValues.spt01_bmi = value;
+      formValues.spt01_bmi_level = level;
+      document.querySelectorAll('[data-field="spt01_bmi"]').forEach((input) => { input.value = value; });
+      document.querySelectorAll('[data-bmi-note]').forEach((note) => { note.textContent = level; });
+      updateCompletion();
+    }
+
+    function syncRegistrationFromAssessment(key, value) {
+      const map = { spt01_age: "#age", spt01_gender: "#gender", spt01_weight: "#weight", spt01_height: "#height", spt01_position: "#position", spt01_position_other: "#positionOther", spt01_tenure: "#tenure" };
+      if (map[key] && $(map[key])) $(map[key]).value = value;
+      if (key === "spt01_weight" || key === "spt01_height") computeBMI();
+    }
+
+    function bindRegistration() {
+      ensureParticipantId();
+      const endpointInput = $("#sheetEndpoint");
+      if (endpointInput) {
+        endpointInput.value = cleanSheetEndpoint(localStorage.getItem(sheetEndpointKey) || endpointInput.value || defaultSheetEndpoint);
+        localStorage.setItem(sheetEndpointKey, endpointInput.value);
+        endpointInput.addEventListener("input", () => {
+          endpointInput.value = cleanSheetEndpoint(endpointInput.value);
+          localStorage.setItem(sheetEndpointKey, endpointInput.value);
+        });
+        endpointInput.addEventListener("change", () => {
+          endpointInput.value = cleanSheetEndpoint(endpointInput.value);
+          localStorage.setItem(sheetEndpointKey, endpointInput.value);
+        });
+      }
+      ["#fullName", "#age", "#gender", "#weight", "#height", "#position", "#positionOther", "#tenure"].forEach((selector) => {
+        const input = $(selector);
+        if (input) input.addEventListener("input", updateCompletion);
+        if (input) input.addEventListener("change", updateCompletion);
+      });
+      [["#age", "spt01_age"], ["#gender", "spt01_gender"], ["#weight", "spt01_weight"], ["#height", "spt01_height"], ["#position", "spt01_position"], ["#positionOther", "spt01_position_other"], ["#tenure", "spt01_tenure"]].forEach(([selector, key]) => {
+        const input = $(selector);
+        if (!input) return;
+        const updateValue = () => {
+          formValues[key] = input.value;
+          if (selector === "#weight" || selector === "#height") computeBMI();
+          if (selector === "#position" || selector === "#positionOther") {
+            $("#positionOtherWrap")?.classList.toggle("show", $("#position")?.value === "อื่นๆ");
+          }
+          updateCompletion();
+        };
+        input.addEventListener("input", updateValue);
+        input.addEventListener("change", updateValue);
+        updateValue();
+      });
+      computeBMI();
+    }
+
+    function completionStats() {
+      const totalStages = 9;
+      const index = Math.max(0, activeTabIndex());
+      const list = $("#questionList");
+      let local = 0;
+      if (list) {
+        const rect = list.getBoundingClientRect();
+        const scrollable = Math.max(1, list.scrollHeight - window.innerHeight * 0.55);
+        local = Math.min(1, Math.max(0, (window.innerHeight * 0.75 - rect.top) / scrollable));
+      }
+      if (activeTab === "SPT-08") {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const documentProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+        local = Math.max(local, documentProgress);
+        if (local >= 0.94) local = 1;
+      }
+      const percent = Math.max(0, Math.min(100, Math.round(((1 + index + local) / totalStages) * 100)));
+      return { total: 100, done: percent, percent };
+    }
+
+    function updateCompletion() {
+      const stats = completionStats();
+      if ($("#progressFill")) $("#progressFill").style.width = `${stats.percent}%`;
+      if ($("#progressLabel")) $("#progressLabel").textContent = `${textMap.progressLabel} ${stats.percent}%`;
+      if ($("#progressDetail")) $("#progressDetail").textContent = stats.percent >= 100 ? textMap.progressDone : `ประมาณ ${stats.percent}% ของเส้นทางประเมิน`;
+      const submitButton = $("#submitFinalBtn");
+      const submitNote = $("#finalSubmitNote");
+      const readyToSubmit = activeTab === "SPT-08" && stats.percent >= 100;
+      if (submitButton) submitButton.hidden = !readyToSubmit;
+      if (submitNote) submitNote.hidden = readyToSubmit;
+    }
+
+    function activeTabIndex() { return tabs.findIndex((tab) => tab.id === activeTab); }
+
+    function goTab(delta) {
+      const index = activeTabIndex();
+      const next = Math.max(0, Math.min(tabs.length - 1, index + delta));
+      activeTab = tabs[next].id;
+      renderTabs();
+      renderQuestions();
+      updateCompletion();
+      document.querySelector("#assessment").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function printableResultHtml() {
+      const record = buildRecord();
+      return `<!doctype html><html><head><meta charset="utf-8"><title>${textMap.printTitle}</title><style>body{font-family:Segoe UI,Tahoma,sans-serif;margin:32px;color:#17231f}h1{color:#0b5f4a}.box{border:1px solid #d8e4dd;border-radius:10px;padding:16px;margin:12px 0}.score{font-size:42px;color:#0b5f4a;font-weight:800}.muted{color:#66746e}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #d8e4dd;padding:8px;text-align:left}</style></head><body><h1>SMART POSTURE THAI</h1><p class="muted">${record.participantId} | ${record.fullName} | ${record.phase}</p><div class="box"><div class="score">${record.risk}/100</div><h2>${record.level}</h2><p>${record.advice}</p></div><table><tr><th>Tool</th><th>Score</th></tr><tr><td>SPT-02 Office Syndrome</td><td>${record.office}/100</td></tr><tr><td>SPT-03 Musculoskeletal symptom</td><td>${record.msdRaw}/60</td></tr><tr><td>SPT-04 Ergonomics</td><td>${record.ergoRaw}/120</td></tr><tr><td>SPT-05 Pain Score</td><td>${record.pain}/10</td></tr><tr><td>SPT-06 Functional activity</td><td>${record.activityRaw}/150</td></tr><tr><td>SPT-07 Satisfaction</td><td>${record.satisfactionRaw}/75</td></tr></table><script>window.print();<\/script></body></html>`;
+    }
+
+    function printResult() {
+      const win = window.open("", "_blank");
+      if (!win) return;
+      win.document.write(printableResultHtml());
+      win.document.close();
+    }
+
+    async function downloadResultJpg() {
+      const record = buildRecord();
+      const rows = spt08Rows();
+      const analysis = typeof spt08Analysis === "function" ? spt08Analysis() : null;
+      const canvas = document.createElement("canvas");
+      const width = 1080;
+      const height = 2200;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#f7faf8";
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "#0b5f4a";
+      ctx.fillRect(0, 0, width, 170);
+
+      function splitThai(value) {
+        return String(value || "").replace(/([ก-๙])([A-Za-z0-9])/g, "$1 $2").replace(/([A-Za-z0-9])([ก-๙])/g, "$1 $2").split(/\s+/).filter(Boolean);
+      }
+
+      function wrapText(value, x, y, size = 32, color = "#17231f", bold = false, maxWidth = 900, lineHeight = size * 1.35) {
+        ctx.font = `${bold ? "700" : "400"} ${size}px Tahoma, Arial, sans-serif`;
+        ctx.fillStyle = color;
+        const words = splitThai(value);
+        let line = "";
+        let yy = y;
+        for (const word of words) {
+          const test = line ? `${line} ${word}` : word;
+          if (ctx.measureText(test).width > maxWidth && line) {
+            ctx.fillText(line, x, yy);
+            line = word;
+            yy += lineHeight;
+          } else if (ctx.measureText(test).width > maxWidth) {
+            let chunk = "";
+            for (const char of word) {
+              const next = chunk + char;
+              if (ctx.measureText(next).width > maxWidth && chunk) {
+                ctx.fillText(chunk, x, yy);
+                yy += lineHeight;
+                chunk = char;
+              } else {
+                chunk = next;
+              }
+            }
+            line = chunk;
+          } else {
+            line = test;
+          }
+        }
+        if (line) ctx.fillText(line, x, yy);
+        return yy + lineHeight;
+      }
+
+      function card(x, y, w, h, fill = "#ffffff") {
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = "#d8e4dd";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 18);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      wrapText("SMART POSTURE THAI", 70, 72, 44, "#ffffff", true, 900);
+      wrapText("ผลสรุปรายบุคคล", 70, 124, 28, "#f7f0df", false, 900);
+      wrapText(`${record.participantId} | ${record.fullName}`, 70, 225, 30, "#17231f", true, 900);
+      wrapText(`วันที่บันทึก: ${new Date().toLocaleDateString("th-TH")}`, 70, 265, 24, "#66746e");
+
+      card(70, 310, 940, 230, "#ffffff");
+      wrapText(`${record.risk}/100`, 105, 385, 58, "#0b5f4a", true, 350);
+      wrapText(record.level, 360, 370, 32, "#17231f", true, 560);
+      wrapText(record.advice, 360, 420, 24, "#66746e", false, 560, 34);
+
+      let y = 595;
+      wrapText("สรุปคะแนนรายด้าน", 70, y, 34, "#0b5f4a", true);
+      y += 34;
+      card(70, y, 940, 560);
+      y += 48;
+      rows.forEach((row) => {
+        const label = row.tool.replace(/^SPT-\d+\s*/, "");
+        const nextY = wrapText(label, 105, y, 20, "#17231f", false, 460, 28);
+        wrapText(row.score, 610, y, 22, "#0b5f4a", true, 120);
+        const interpY = wrapText(row.interpretation, 745, y, 20, "#17231f", false, 230, 28);
+        y = Math.max(nextY, interpY) + 18;
+      });
+
+      y += 36;
+      wrapText("คำแนะนำ", 70, y, 34, "#0b5f4a", true);
+      y = wrapText(record.advice, 70, y + 45, 26, "#17231f", false, 920, 38);
+
+      y += 22;
+      wrapText("แผนการดูแลรายบุคคล", 70, y, 34, "#0b5f4a", true);
+      y += 44;
+      const planItems = [
+        ...(analysis?.behavior || []).slice(0, 3),
+        ...(analysis?.program || []).slice(0, 3),
+        ...(analysis?.followup || []).slice(0, 3)
+      ].filter(Boolean);
+      const finalItems = planItems.length ? planItems : [
+        "ปรับท่านั่งและสถานที่ทำงานให้เหมาะสม",
+        "ลุกเปลี่ยนอิริยาบถทุก 30–60 นาที",
+        "ฝึกยืดเหยียดกล้ามเนื้อและฤๅษีดัดตน",
+        "ติดตามผลตามระดับความเสี่ยง"
+      ];
+      finalItems.slice(0, 9).forEach((item) => {
+        y = wrapText(`• ${item}`, 90, y, 24, "#17231f", false, 860, 34);
+      });
+
+      y += 20;
+      wrapText("หมายเหตุ: ภาพนี้เป็นผลสรุปจากแบบประเมิน SMART POSTURE THAI ใช้ประกอบการติดตามดูแลสุขภาพ และควรปรึกษาผู้รับผิดชอบโครงการเมื่อมีอาการมากขึ้น", 70, y, 20, "#66746e", false, 920, 30);
+
+      const filename = `${record.participantId}-smart-posture-result.jpg`;
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+      if (navigator.canShare && navigator.share && blob) {
+        const file = new File([blob], filename, { type: "image/jpeg" });
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: "SMART POSTURE THAI Result" });
+            toast(textMap.jpgDownloaded);
+            return;
+          } catch {}
+        }
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast(textMap.jpgDownloaded);
+    }
+
+    function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = String(text).split(" ");
+      let line = "";
+      words.forEach((word) => {
+        const test = line + word + " ";
+        if (ctx.measureText(test).width > maxWidth && line) { ctx.fillText(line, x, y); line = word + " "; y += lineHeight; }
+        else line = test;
+      });
+      ctx.fillText(line, x, y);
+    }
+
+    function appsScriptSource() {
+      return `const SHEET_NAMES = ['Participants','PreTest','PostTest','FollowUp','Scoring','Dashboard_Data'];\n\nfunction setupSmartPostureThai() {\n  const ss = SpreadsheetApp.getActive();\n  SHEET_NAMES.forEach(name => { if (!ss.getSheetByName(name)) ss.insertSheet(name); });\n  const headers = ['Timestamp','ParticipantID','FullName','Age','Gender','Position','Phase','Risk','Level','Pain','Office','MSD','Ergo','Activity','Satisfaction','KPI','RawJSON'];\n  ['PreTest','PostTest','FollowUp'].forEach(name => ss.getSheetByName(name).getRange(1,1,1,headers.length).setValues([headers]));\n  ss.getSheetByName('Participants').getRange(1,1,1,8).setValues([['ParticipantID','FullName','Age','Gender','Position','WorkHours','ComputerHours','Timestamp']]);\n}\n\nfunction doPost(e) {\n  const ss = SpreadsheetApp.getActive();\n  const data = JSON.parse(e.postData.contents || '{}');\n  setupSmartPostureThai();\n  ss.getSheetByName('Participants').appendRow([data.participantId,data.fullName,data.age,data.gender,data.position,data.workHours,data.computerHours,data.timestamp]);\n  const target = ss.getSheetByName(data.phase || 'PreTest');\n  target.appendRow([data.timestamp,data.participantId,data.fullName,data.age,data.gender,data.position,data.phase,data.risk,data.level,data.pain,data.office,data.msdRaw,data.ergoRaw,data.activityRaw,data.satisfactionRaw,data.kpi,JSON.stringify(data)]);\n  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);\n}`;
+    }
+
+    function downloadAppsScript() {
+      const blob = new Blob([appsScriptSource()], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "smart-posture-thai-apps-script.gs";
+      a.click();
+      URL.revokeObjectURL(url);
+      toast(textMap.appsScriptDownloaded);
+    }
+
+    $$(".nav button").forEach((button) => { button.addEventListener("click", () => { $$(".nav button").forEach((item) => item.classList.remove("active")); button.classList.add("active"); document.querySelector(button.dataset.go).scrollIntoView({ behavior: "smooth", block: "start" }); }); });
+    $("#demoBtn").addEventListener("click", seedDemo);
+    $("#calculateBtn").addEventListener("click", () => { updateResult(); renderQuestions(); document.querySelector("#result").scrollIntoView({ behavior: "smooth", block: "start" }); toast(textMap.calculated); });
+    $("#saveLocalBtn").addEventListener("click", () => { saveRecord(buildRecord()); toast(textMap.savedDemo); });
+    $("#sendSheetBtn").addEventListener("click", () => sendToSheet(buildRecord()));
+    $("#exportCsvBtn").addEventListener("click", downloadCsv);
+    $("#homeTopBtn").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    $("#prevTabBtn").addEventListener("click", () => goTab(-1));
+    $("#nextTabBtn").addEventListener("click", () => goTab(1));
+    $("#printResultBtn").addEventListener("click", printResult);
+    $("#downloadJpgBtn").addEventListener("click", () => downloadResultJpg());
+    $("#downloadAppsScriptBtn").addEventListener("click", downloadAppsScript);
+    $("#clearBtn").addEventListener("click", () => { localStorage.removeItem(storageKey); renderDashboard(); toast(textMap.cleared); });
+
+    window.addEventListener("scroll", updateCompletion, { passive: true }); initScores(); bindRegistration(); renderTabs(); renderQuestions(); updateResult(); renderDashboard(); setAppLink(); updateCompletion();
+  </script>
+</body>
+</html>
